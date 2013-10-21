@@ -1,4 +1,4 @@
-rm(list=ls())
+#rm(list=ls())
 
 abc_optim <- function(
   par,               # Vector de parametros a opti 
@@ -57,7 +57,7 @@ abc_optim <- function(
         change <- change + 1
         GlobalMin <<- f[i]
         
-        # Replacing new group of parameters
+        # ReplacingF new group of parameters
         GlobalParams <<- Foods[i,]
       }
     }
@@ -103,15 +103,16 @@ abc_optim <- function(
   {
     for (i in 1:FoodNumber) 
     {
+      r <- runif(1)
       # The parameter to be changed is determined randomly
-      param2change <- (1:D)[order(runif(D))][1]
+      param2change <- floor(r*D) + 1 
       
       # A randomly chosen solution is used in producing a mutant solution of the solution i
-      neighbour <- (1:FoodNumber)[order(runif(FoodNumber))][1]
+      neighbour <- floor(r*FoodNumber) + 1 
  
       # Randomly selected solution must be different from the solution i
       while(neighbour==i)
-        neighbour <- (1:FoodNumber)[order(runif(FoodNumber))][1]
+        neighbour <- floor(runif(1)*FoodNumber) + 1
       
       solution <<- Foods[i,]
       solution[which(solution > ub)] <<- ub
@@ -158,10 +159,10 @@ abc_optim <- function(
   # probability values are calculated by using fitness values and normalized by dividing maximum fitness value*/
   CalculateProbabilities <- function()
   {
-    maxfit <<- fitness[1]
+    maxfit <- fitness[1]
     for (i in 1:FoodNumber) 
     {
-      if (fitness[i] > maxfit) maxfit <<- fitness[i]
+      if (fitness[i] > maxfit) maxfit <- fitness[i]
     }
     
     prob <<- .9*(fitness/maxfit) + .1
@@ -179,16 +180,17 @@ abc_optim <- function(
       if (r < prob[i]) # choose a food source depending on its probability to be chosen
       {
         t <- t + 1
+        r <- runif(1)
         
         # The parameter to be changed is determined randomly
-        param2change <- (1:D)[order(runif(D))][1]
+        param2change <- floor(r*D) + 1
         
         # A randomly chosen solution is used in producing a mutant solution of the solution i
-        neighbour <- (1:FoodNumber)[order(runif(FoodNumber))][1]
+        neighbour <- floor(r*FoodNumber) + 1
         
         #Randomly selected solution must be different from the solution i*/        
         while(neighbour==i)
-          neighbour <- (1:FoodNumber)[order(runif(FoodNumber))][1]
+          neighbour <- floor(runif(1)*FoodNumber) + 1
 
         solution <<- Foods[i,]
         solution[which(solution > ub)] <<- ub
@@ -262,68 +264,68 @@ abc_optim <- function(
 
   return(
     list(
-      params=GlobalParams,
-      iter=iter,
-      value=fun(GlobalParams)
+      par=GlobalParams,
+      value=fun(GlobalParams),
+      counts=c("function"=iter)
       )
     )
   
 }
-
-################################################################################
-# Ejemplos
-################################################################################
-
-X <- c(3,2,3,1)
-
-# Funcion de matching
-fun <- function(lambda, x0, X, M)
-{
-  norm((x0 - X)*lambda, type="2") + exp(abs(sum(lambda > 0) - M))
-}
-
-# Mejor vecino para
-#  x0 = 2
-#  X  = c(3,2,3,1)
-#  M  = 1
-# El mejor resultado debe ser [0,1,0,0]
-x1 <- abc_optim(rep(0,4), fun, x0=2, X=X, M=1, lb=0, ub=1, optiinteger=T)
-x1
-
-# Mejores dos vecinos para
-#  x0 = 3
-#  X  = c(3,2,3,1)
-#  M  = 2
-# El mejor resultado debe ser [1,0,1,0]
-x2 <- abc_optim(rep(0,4), fun, x0=3, X=X, M=2, lb=0, ub=1, optiinteger=T)
-x2
-
-################################################################################
-# Definicion de la funcion
-fun <- function(x) {
-  -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
-}
-
-x3 <- 
-  abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
-x3
-optim(rep(0,2), fn=fun, method="BFGS", ) #lower=-5,upper=5)
-
-################################################################################
-# Definicion de la funcion
-
-fun <- function(x) {
-  -4+(x[1]^2 + x[2]^2)
-}
-
-abc_optim(c(1,1), fn=fun, lb=-100000, ub=100000,criter=100)
-
-################################################################################
-# Definicion de la funcion
-
-fun <- function(x) {
-  -(x^4 - 2*x^2 - 8)
-}
-
-abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
-
+# 
+# ################################################################################
+# # Ejemplos
+# ################################################################################
+# 
+# X <- c(3,2,3,1)
+# 
+# # Funcion de matching
+# fun <- function(lambda, x0, X, M)
+# {
+#   norm((x0 - X)*lambda, type="2") + exp(abs(sum(lambda > 0) - M))
+# }
+# 
+# # Mejor vecino para
+# #  x0 = 2
+# #  X  = c(3,2,3,1)
+# #  M  = 1
+# # El mejor resultado debe ser [0,1,0,0]
+# x1 <- abc_optim(rep(0,4), fun, x0=2, X=X, M=1, lb=0, ub=1, optiinteger=T)
+# x1
+# 
+# # Mejores dos vecinos para
+# #  x0 = 3
+# #  X  = c(3,2,3,1)
+# #  M  = 2
+# # El mejor resultado debe ser [1,0,1,0]
+# x2 <- abc_optim(rep(0,4), fun, x0=3, X=X, M=2, lb=0, ub=1, optiinteger=T)
+# x2
+# 
+# ################################################################################
+# # Definicion de la funcion
+# fun <- function(x) {
+#   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
+# }
+# 
+# x3 <- 
+#   abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
+# x3
+# optim(rep(0,2), fn=fun) #lower=-5,upper=5)
+# 
+# ################################################################################
+# # Definicion de la funcion
+# 
+# fun <- function(x) {
+#   -4+(x[1]^2 + x[2]^2)
+# }
+# 
+# abc_optim(c(1,1), fn=fun, lb=-100000, ub=100000,criter=100)
+# 
+# ################################################################################
+# # Definicion de la funcion
+# 
+# fun <- function(x) {
+#   -(x^4 - 2*x^2 - 8)
+# }
+# 
+# abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
+# 

@@ -204,6 +204,7 @@ SendOnlookerBees <- function()
       r = runif(1)
       neighbour= floor(r*FoodNumber)
       if (!neighbour) neighbour <- 1
+      neighbour <- (1:FoodNumber)[order(runif(FoodNumber))][1]
       
       #Randomly selected solution must be different from the solution i*/        
       while(neighbour==i)
