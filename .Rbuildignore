@@ -1,0 +1,7 @@
+src/
+\.pdf$
+\.Rproj.*
+\.Rhist.*
+R/abc\.R
+^.*\.Rproj$
+^\.Rproj\.user$
