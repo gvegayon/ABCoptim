@@ -1,7 +1,11 @@
-ABCoptim (beta)
+ABCoptim (alfa)
 ===============
 
 An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
+
+This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
+  
+Please consider that this version is in alpha state of development, thus any evident (precision) error should be blaimed to the package author (not to the algorithm itself).
 
 Authors
 =======
