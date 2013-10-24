@@ -1,4 +1,4 @@
-#rm(list=ls())
+# rm(list=ls())
 
 abc_optim <- function(
   par,               # Vector de parametros a opti 
@@ -16,8 +16,11 @@ abc_optim <- function(
 )
 {
   # Checking limits
-  if (is.infinite(lb)) lb <- -(.Machine$double.xmax*1e-10)
-  if (is.infinite(ub)) ub <- .Machine$double.xmax*1e-10
+  if (length(lb)>0) lb <- rep(lb, D)
+  if (length(ub)>0) ub <- rep(ub, D)
+
+  lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
+  ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
   
   # Initial params
   Foods       <- matrix(double(FoodNumber*D), nrow=FoodNumber)
@@ -64,7 +67,6 @@ abc_optim <- function(
     # Increasing persistance
     if (!change) persistance <<- persistance + 1
   }
-  # MemorizeBestSource()
   
   # Variables are initialized in the range [lb,ub]. If each parameter has different range, use arrays lb[j], ub[j] instead of lb and ub 
   # Counters of food sources are also initialized in this function
@@ -72,11 +74,9 @@ abc_optim <- function(
   init <- function(index, ...)
   {
     if (optiinteger) Foods[index,] <<- runif(D) > .5
-    else Foods[index,] <<- runif(D,lb,ub)
+    else Foods[index,] <<- sapply(1:D, function(k) runif(1,lb[k],ub[k]) ) #runif(D,lb,ub)
     
     solution <<- Foods[index,]
-    solution[which(solution > ub)] <<- ub
-    solution[which(solution < lb)] <<- ub
     
     f[index] <<- fun(solution)
 
@@ -115,8 +115,6 @@ abc_optim <- function(
         neighbour <- floor(runif(1)*FoodNumber) + 1
       
       solution <<- Foods[i,]
-      solution[which(solution > ub)] <<- ub
-      solution[which(solution < lb)] <<- ub
       
       # v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) 
       r <- runif(1)
@@ -124,10 +122,13 @@ abc_optim <- function(
       if (optiinteger) solution[param2change] <<- r > 0.5
       else
       {
-        solution[param2change] <<- Foods[i,param2change]+(Foods[i,param2change]-Foods[neighbour,param2change])*(r-0.5)*2
+        solution[param2change] <<- 
+          Foods[i,param2change]+
+          (Foods[i,param2change]-Foods[neighbour,param2change])*(r-0.5)*2
+
         # if generated parameter value is out of boundaries, it is shifted onto the boundaries
-        if (solution[param2change]<lb) solution[param2change]<<-lb
-        if (solution[param2change]>ub) solution[param2change]<<-ub
+        if (solution[param2change]<lb[param2change]) solution[param2change]<<-lb[param2change]
+        if (solution[param2change]>ub[param2change]) solution[param2change]<<-ub[param2change]
       }
       
       ObjValSol <<- fun(solution)
@@ -193,8 +194,6 @@ abc_optim <- function(
           neighbour <- floor(runif(1)*FoodNumber) + 1
 
         solution <<- Foods[i,]
-        solution[which(solution > ub)] <<- ub
-        solution[which(solution < lb)] <<- ub
         
         # v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
         r = runif(1)
@@ -203,8 +202,8 @@ abc_optim <- function(
         else 
         {
           # if generated parameter value is out of boundaries, it is shifted onto the boundaries*/
-          if (solution[param2change]<lb) solution[param2change] <<- lb
-          if (solution[param2change]>ub) solution[param2change] <<- ub
+          if (solution[param2change]<lb[param2change]) solution[param2change] <<- lb[param2change]
+          if (solution[param2change]>ub[param2change]) solution[param2change] <<- ub[param2change]
           solution[param2change] <<- Foods[i,param2change]+(Foods[i,param2change]-Foods[neighbour,param2change])*(r-0.5)*2
         }
         
@@ -306,9 +305,8 @@ abc_optim <- function(
 #   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 # }
 # 
-# x3 <- 
-#   abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
-# x3
+# abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
+# 
 # optim(rep(0,2), fn=fun) #lower=-5,upper=5)
 # 
 # ################################################################################
@@ -328,4 +326,4 @@ abc_optim <- function(
 # }
 # 
 # abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
-# 
+# # 

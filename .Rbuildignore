@@ -5,3 +5,8 @@ src/
 R/abc\.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
+README\.md
+LICENSE
+\.git/
+source/
+.*\.sh

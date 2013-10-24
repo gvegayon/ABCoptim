@@ -1,11 +1,11 @@
 Package: ABCoptim
 Type: Package
 Title: Implementation of Artificial Bee Colony (ABC) Optimization
-Version: 0.13.10
-Date: 2013-10-20
-Author: George Vega Yon <george.vega@nodoschile.org> [aut], Enyelbert Munoz <enyeldoc2011@gmail.com> [ctb]
+Version: 0.13.10.24
+Date: 2013-10-24
+Author: George Vega Yon <g.vegayon@gmail.com> [aut], Enyelbert Muñoz <enyeldoc2011@gmail.com> [ctb]
 Maintainer: George Vega Yon <g.vegayon@gmail.com>
-Description: An implementation of Kaborge (2005) Artificial Bee Colony Optimization algorithm. This (working) version is a Work-in-progress, which is why it has been implemented using pure R code.
-URL: http://github.com/gvegayon/abc, http://mf.erciyes.edu.tr/abc/
+Description: An implementation of Karaboga (2005) Artificial Bee Colony Optimization algorithm. This (working) version is a Work-in-progress, which is why it has been implemented using pure R code. This was developed upon the basic version programmed in \code{C} and distributed at the algorithm's official website.
+URL: http://github.com/gvegayon/ABCoptim, http://mf.erciyes.edu.tr/abc/
 License: GPL (>= 3)
 LazyLoad: yes

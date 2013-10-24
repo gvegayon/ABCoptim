@@ -7,48 +7,36 @@
   An implementation of the Artificial Bee Colony (ABC) Algorithm
 }
 \description{
+  This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in \code{C} and distributed at the algorithm's official website (see the references).
+  
+  Please consider that this version is in alpha state of development, thus any evident (precision) error should be blaimed to the package author (not to the algorithm itself)
+
   Please visit the project home for more information:
-    \url{https://bitbucket.org/gvegayon/rgexf}.
+    \url{https://github.com/gvegayon/ABCoptim}.
 } 
 \details{
   \tabular{ll}{
-    Package: \tab abc_optimization\cr
+    Package: \tab ABCoptim\cr
     Type: \tab Package\cr
-    Version: \tab 0.13.10\cr
-    Date: \tab 2013-10-20\cr
+    Version: \tab 0.13.10.24\cr
+    Date: \tab 2013-10-24\cr
     License: \tab GPL version 2 or later\cr
   }
 }
-\author{George Vega Yon \email{george.vega@nodoschile.org} [aut],
+\author{George Vega Yon \email{g.vegayon@gmail.com} [aut],
 
-Jorge Fabrega Lacoa \email{jorge.fabrega@nodoschile.org} [cnt),
+Enyelbert Muñoz \email{enyeldoc2011@gmail.com} [cnt)}
 
-Joshua B. Kunst \email{jbkunst@gmail.com} [cnt]}
-\note{
-  See the GEXF primer for details on the GEXF graph format:
-  \url{http://gexf.net/1.2draft/gexf-12draft-primer.pdf}
-}
 \references{
-  \itemize{
-    \item rgexf project site: \url{https://bitbucket.org/gvegayon/rgexf}
-    \item Gephi project site: \url{https://gephi.org/}
-    \item GEXF project site: \url{http://gexf.net/}
-    \item Nodos Chile project site (real life examples): \url{http://nodoschile.org/}
-    \item Sigmasj project site : \url{http://sigmajs.org/}
-  }
+D. Karaboga, \emph{An Idea based on Honey Bee Swarm for Numerical Optimization}, tech. report TR06,Erciyes University, Engineering Faculty, Computer Engineering Department, 2005 \url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
+
+Artificial Bee Colony (ABC) Algorithm (website) \url{http://mf.erciyes.edu.tr/abc/index.htm}
+
+Basic version of the algorithm implemented in \code{C} (ABC's official website) \url{http://mf.erciyes.edu.tr/abc/form.aspx}
 }
 \examples{
   \dontrun{
-    demo(gexf) # Example of gexf command using fictional data.
-    demo(gexfattributes) # Working with attributes.
-    demo(gexfbasic) # Basic net.
-    demo(gexfdynamic) # Dynamic net.
-    demo(edge.list) # Working with edges lists.
-    demo(gexffull) # All the package.
-    demo(gexftwitter) # Example with real data of chilean twitter accounts.
-    demo(gexfdynamicandatt) # Dynamic net with static attributes.
-    demo(gexfbuildfromscratch) # Example building a net from scratch.
-    demo(gexfigraph) # Two-way gexf-igraph conversion
+    demo(ABCoptim) # Some functions...
   }
 }
 \keyword{ package }
