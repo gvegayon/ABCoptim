@@ -10,7 +10,7 @@ Enyelbert Muñoz [cnt]
 
 References
 ==========
-D. Karaboga, _An Idea based on Honey Bee Swarm for Numerical Optimization_, tech. report TR06,Erciyes University, Engineering Faculty, Computer Engineering Department, 2005 http://mf.erciyes.edu.tr/abc/pub/tr06\_2005.pdf
+D. Karaboga, _An Idea based on Honey Bee Swarm for Numerical Optimization_, tech. report TR06,Erciyes University, Engineering Faculty, Computer Engineering Department, 2005 http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
 
 Artificial Bee Colony (ABC) Algorithm (website) http://mf.erciyes.edu.tr/abc/index.htm
 
