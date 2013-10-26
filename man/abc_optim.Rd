@@ -55,4 +55,9 @@ fw <- function (x)
   10*sin(0.3*x)*sin(1.3*x^2) + 0.00001*x^4 + 0.2*x+80
 
 abc_optim(50, fw, lb=-100, ub=100, criter=100)
+
+EXAMPLE 3: 5D sphere, global minimum at about (0,0,0,0,0)
+fs <- function(x) sum(x^2)
+
+abc_optim(rep(10,5), fs, lb=-100, ub=100, criter=200)
 }
