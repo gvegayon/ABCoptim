@@ -18,8 +18,8 @@
   \tabular{ll}{
     Package: \tab ABCoptim\cr
     Type: \tab Package\cr
-    Version: \tab 0.13.10.24\cr
-    Date: \tab 2013-10-24\cr
+    Version: \tab 0.13.11\cr
+    Date: \tab 2013-11-05\cr
     License: \tab GPL version 2 or later\cr
   }
 }
