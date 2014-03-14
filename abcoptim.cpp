@@ -3,14 +3,14 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double CalculateFitness(double x) {  
+double abcOptim_calculateFitness(double x) {  
 	if (x >= 0) return 1/(x + 1);
 	else return(1 + fabs(x));
 }
 
 // The best food source is memorized
 // [[Rcpp::export]]
-List MemorizeBestSource(
+void abcOptim_memorizeBestSource(
 	List foods,
 	List global_min	
 ) {
@@ -22,42 +22,46 @@ List MemorizeBestSource(
 	int nparam = foods_pos.ncol();
 
 	/* Pointing to the globmin pos and valfun */
-	NumericVector global_min_pos = global_min["pos"];
-	double global_min_val = global_min["val"];
-
-	/* New potential value */
-	NumericVector new_global_min_pos(global_min_pos);
-	double new_global_min_val = global_min_val;
-	int new_persistance = global_min["per"];
+	NumericMatrix global_min_pos = global_min["pos"];
+	NumericVector global_min_val = global_min["val"];
+	NumericVector global_min_per = global_min["per"];
 
 	for(int i=0;i<nfoods;i++)
-		if (foods_val[i] < new_global_min_val) {
+		if (foods_val[i] < global_min_val[0]) {
       
 			/* Found a new global minimum */
-			new_global_min_val = foods_val[i];
+			global_min_val[0] = foods_val[i];
 			for(int j=0;j<nparam;j++)
-				new_global_min_pos[j] = foods_pos(i,j);
+				global_min_pos(0,j) = foods_pos(i,j);
         
 		}
-		else new_persistance+=1;
+		else global_min_per[0]+=1;
 
-	/* Returning output */
-	return List::create(
-		_["pos"]=new_global_min_pos,
-		_["val"]=new_global_min_val,
-		_["per"]=new_persistance
-	);
+	return ;
 }
 
 // [[Rcpp::export]]
-NumericVector fun(Function targetfun, NumericVector par) {
+NumericVector abcOptim_fun(Function targetfun, NumericVector par) {
 	return targetfun(par);
+}
+
+// [[Rcpp::export]]
+List abcOptim_gen(int nfoods,int nparam) {
+	NumericMatrix pos(nfoods,nparam);
+	NumericVector val(nfoods);
+	NumericVector per(nfoods);
+
+	return List::create(
+		_["pos"] = pos,
+		_["val"] = val,
+		_["per"] = per
+	);
 } 
 
 // [[Rcpp::export]]
-List init(
+void abcOptim_init(
 	List Foods,
-	int index, bool firstinit, bool optiinteger,
+	bool optiinteger,
 	NumericVector lb, NumericVector ub,
 	Function targetfun
 ) {
@@ -74,7 +78,7 @@ List init(
 			foods_pos(i,_) = runif(nparam) > .5;
 
 			/* Getting the first value */
-			foods_val[i] = fun(targetfun, foods_pos(i,_))[0];
+			foods_val[i] = abcOptim_fun(targetfun, foods_pos(i,_))[0];
 	}
 	else {
 		for(i=0;i<nfoods;i++) {
@@ -83,17 +87,39 @@ List init(
 				foods_pos(i,j) = runif(1, lb[j], ub[j])[0];
 			
 			/* Getting the first value */
-			foods_val[i] = fun(targetfun, foods_pos(i,_))[0];
+			foods_val[i] = abcOptim_fun(targetfun, foods_pos(i,_))[0];
 		}
 
 	}
 
-	return List::create(
-		_["pos"] = foods_pos,
-		_["val"] = foods_val
-	);
+	return ;
 }
 
+// [[Rcpp::export]]
+void abcOptim_sendEmployedBees(List Foods, bool optiinteger) {
+	/* Poiting */
+	NumericMatrix foods_pos = Foods["pos"];
+	NumericVector foods_val = Foods["val"];
+
+	NumericMatrix foods_pos0 = clone(foods_pos);
+	NumericVector foods_val0 = clone(foods_val);
+
+	int nparam = foods_pos.ncol();
+	int nfoods = foods_val.size();
+
+	NumericVector r = runif(nfoods);
+
+	int param2change = floor(r[0]*nparam);
+
+	/* Random solution */
+	IntegerVector neighbour(nfoods);
+	for(int i=0;i<nfoods;i++) 
+		while(neighbour[i]==i) neighbour[i] = floor(r[i]*nfoods);
+
+	if (optiinteger) foods_pos0[_,param2change] = r > .5;
+
+	return ;
+}
 
 /*** R
 foods <- list(
@@ -104,8 +130,10 @@ foods <- list(
   val=c(-1,.1,1)
 )
 foods
-global_min <- list(pos=c(1,1),val=.15,per=0)
-MemorizeBestSource(foods,global_min)
+global_min <- list(pos=matrix(c(1,1),nrow=1),val=.15,per=0)
+global_min
+abcOptim_memorizeBestSource(foods,global_min)
+global_min
 */
 
 /* // [[Rcpp::export]] */
