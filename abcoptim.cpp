@@ -116,7 +116,18 @@ void abcOptim_sendEmployedBees(List Foods, bool optiinteger) {
 	for(int i=0;i<nfoods;i++) 
 		while(neighbour[i]==i) neighbour[i] = floor(r[i]*nfoods);
 
-	if (optiinteger) foods_pos0[_,param2change] = r > .5;
+	/* Variables */
+	if (optiinteger) {
+		foods_pos0(_,param2change) = ifelse(r > .5,1.0,.0);
+	}
+	else {
+		/* Changin the values */
+		for(int i=0;i<nfoods;i++) 
+			foods_pos0(i,param2change) =
+				foods_pos0(i,param2change) +
+				(foods_pos0(i,param2change) - 
+				foods_pos0(neighbour[i],param2change)*(r[i]-.5)*2);
+	}
 
 	return ;
 }
