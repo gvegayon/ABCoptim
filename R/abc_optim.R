@@ -66,7 +66,8 @@ abc_optim <- function(
     if (!change) persistance <<- persistance + 1
   }
   
-  # Variables are initialized in the range [lb,ub]. If each parameter has different range, use arrays lb[j], ub[j] instead of lb and ub 
+  # Variables are initialized in the range [lb,ub]. If each parameter has
+  # different range, use arrays lb[j], ub[j] instead of lb and ub 
   # Counters of food sources are also initialized in this function
   
   init <- function(index, firstinit=FALSE, ...) {
@@ -239,7 +240,8 @@ abc_optim <- function(
     }
   }
   
-  # determine the food sources whose trial counter exceeds the "limit" value. In Basic ABC, only one scout is allowed to occur in each cycle*/
+  # determine the food sources whose trial counter exceeds the "limit" value.
+  # In Basic ABC, only one scout is allowed to occur in each cycle*/
   
   SendScoutBees <- function() {
     maxtrialindex <- 1
