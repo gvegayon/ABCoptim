@@ -6,11 +6,26 @@ using namespace Rcpp;
 #define MAX_FOODNUMBER 100
 #define MAX_D 100
 
+////////////////////////////////////////////////////////////////////////////////
 /* Structures definition */
+////////////////////////////////////////////////////////////////////////////////
+
+/* Boundaries */
 struct abc_boundaries {
   double lb[MAX_FOODNUMBER*MAX_D];
   double ub[MAX_FOODNUMBER*MAX_D];
 } ;
+
+/* Food sources */
+struct abc_food {
+  double pos[MAX_FOODNUMBER*MAX_D];
+  double prob[MAX_FOODNUMBER];
+  double val[MAX_FOODNUMBER];
+  double GlobalMin;
+  double GlobalParams[MAX_D];
+  double trials[MAX_D];
+};
+
 
 /* Calculates runif */
 // [[Rcpp::export]]
@@ -27,9 +42,10 @@ double abc_calc_fit(double x) {
 
 // The best food source is memorized
 void abc_mem_best_src(
-  List Foods,
+  SEXP Foods0,
   int * persistance)
 {
+  List Foods(Foods0);
 	// Poiting to the foods position en valfun
 	NumericMatrix foods_pos = Foods["pos"];
 	NumericVector foods_val = Foods["val"];
@@ -60,16 +76,15 @@ double abc_fun(Function targetfun, NumericVector par) {
 	return as<double>(targetfun(par));
 }
 
-List abc_initialize(
+SEXP abc_initialize(
   int nfoods,
   int nparam,
   Function objfun,
-  double * lb,
-  double * ub,
-  int limit,
-  double * positions
+  abc_boundaries * b,
+  int limit
 ) 
 {
+    
   NumericVector fitness(nfoods);
 	NumericMatrix pos(nfoods,nparam);
 	NumericVector val(nfoods);
@@ -80,17 +95,14 @@ List abc_initialize(
   for(int i=0;i<nfoods;i++)
   {
     for(int j=0;j<nparam;j++)
-    {
-      pos(i,j) = abc_unif(lb[j],ub[j]);
-      positions[i*nparam+j] = pos(i,j);
-    }
+      pos(i,j) = abc_unif(b->lb[j],b->ub[j]);
       
     val[i]     = as<double>(objfun(pos(i,_)));
     fitness[i] = abc_calc_fit(val[i]);
   }
   
 
-	return List::create(
+	return wrap(List::create(
     _["fitness"]      = fitness,  /* Fitness of each food source */
     _["pos"]          = pos,      /* Current possition of each food source */
     _["prob"]         = prob,
@@ -100,17 +112,18 @@ List abc_initialize(
     _["trials"]       = trials,   /* Number of trials on the source */
     _["persistance"]  = 0,        /* N of iter without improvement */
     _["limit"]        = limit     /* Maximum number of attemps */
-	);
+	));
 } 
 
 void abc_init(
   int index,
-	List Foods,
+	SEXP Foods0,
 	Function objfun,
-	double * lb,
-	double * ub
+	abc_boundaries * b
 ) {
 	int i,j;
+  
+  List Foods(Foods0);
 
 	/* Getting the food number */
 	NumericMatrix foods_pos = Foods["pos"];
@@ -121,7 +134,7 @@ void abc_init(
 
 	/* Setting the positions */
 	for(j=0;j<nparam;j++)
-		foods_pos(index,j) = abc_unif(lb[j],ub[j]);
+		foods_pos(index,j) = abc_unif(b->lb[j],b->ub[j]);
 	
 	/* Getting the value and */
 	foods_val[index] = abc_fun(objfun, foods_pos(index,_));
@@ -132,12 +145,14 @@ void abc_init(
 }
 
 void abc_send_empl_bees(
-  List Foods, 
+  SEXP Foods0, 
   int nfoods, int nparam,
-  double * lb, double * ub, 
+  abc_boundaries * b, 
   Function objfun
 ) {
+  
 	/* Poiting */
+  List Foods(Foods0);
 	NumericMatrix foods_pos = Foods["pos"];
 	NumericVector foods_val = Foods["val"];
   NumericVector foods_fit = Foods["fitness"];
@@ -169,10 +184,10 @@ void abc_send_empl_bees(
 			foods_pos(neighbour,param2change)*(abc_unif()-.5)*2);
     
     /* Checking boundaries */
-    if (new_foods_pos[param2change] > ub[param2change]) 
-      new_foods_pos[param2change] = ub[param2change];
-    else if (new_foods_pos[param2change] < lb[param2change]) 
-      new_foods_pos[param2change] = lb[param2change];      
+    if (new_foods_pos[param2change] > b->ub[param2change]) 
+      new_foods_pos[param2change] = b->ub[param2change];
+    else if (new_foods_pos[param2change] < b->lb[param2change]) 
+      new_foods_pos[param2change] = b->lb[param2change];      
     
     new_val = abc_fun(objfun,new_foods_pos);
     new_fit = abc_calc_fit(new_val);
@@ -198,7 +213,8 @@ prob(i)=a*fitness(i)/max(fitness)+b probability values are calculated by using
 fitness values and normalized by dividing maximum fitness value
 */
 // [[Rcpp::export]]
-void abc_calc_prob(List Foods,int FoodNumber) {
+void abc_calc_prob(SEXP Foods0,int FoodNumber) {
+  List Foods(Foods0);
   NumericVector fitness = Foods["fitness"];
   NumericVector prob    = Foods["prob"];
   double maxfit  = fitness[0];
@@ -215,25 +231,25 @@ void abc_calc_prob(List Foods,int FoodNumber) {
 /* Pointer Function Definition */
 /*type double (*ptrFun)(NumericVector x);*/
 void abc_send_onlooker_bees(
-  List Foods, 
+  SEXP Foods0, 
   Function objfun,
   int FoodNumber,
   int D,
-  double * lb,
-  double * ub
+  abc_boundaries * b
   )
 {
   // Onlooker Bee phase
   int i = 0;
   int t = 0;
   
+  List Foods(Foods0);
   NumericVector foods_val = Foods["val"];
   NumericMatrix foods_pos = Foods["pos"];
   NumericVector foods_trl = Foods["trials"];
   NumericVector foods_prb = Foods["prob"];
   // Rprintf("ok\n");
   NumericVector foods_fit = Foods["fitness"];
-  NumericVector solution(D);  
+  NumericMatrix solution  = clone(foods_pos);
   double r=0.0;
   while(t < FoodNumber)
   {
@@ -245,7 +261,6 @@ void abc_send_onlooker_bees(
     if (r < foods_prb[i])
     {
       t += 1;
-      r = abc_unif();
       
       // The parameter to be changed is determined randomly
       int param2change = floor(r*D);
@@ -253,11 +268,9 @@ void abc_send_onlooker_bees(
       /* A randomly chosen solution is used in producing a mutant solution of
       the solution i Randomly selected solution must be different from the
       solution i*/        
-      int neighbour = i;
+      int neighbour = floor(r*FoodNumber);
       while(neighbour==i)
         neighbour = floor(abc_unif()*FoodNumber);
-
-      solution = foods_pos(i,_);
       
       /* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
       r = abc_unif();
@@ -265,21 +278,21 @@ void abc_send_onlooker_bees(
       /* if (optiinteger) solution[param2change] <<- r > .5
       else 
       {*/
-      solution[param2change] =
-        solution[param2change]+
-        (solution[param2change]-foods_pos[neighbour,param2change])*(r-0.5)*2;
+      solution(i,param2change) =
+        solution(i,param2change)+
+        (solution(i,param2change)-foods_pos(neighbour,param2change))*(r-0.5)*2;
       
       /* if generated parameter value is out of boundaries, it is shifted onto
       the boundaries*/
-      if (solution[param2change]<lb[param2change]) 
-        solution[param2change] = lb[param2change];
+      if (solution(i,param2change)< b->lb[param2change]) 
+        solution(i,param2change) = b->lb[param2change];
       
-      if (solution[param2change]>ub[param2change]) 
-        solution[param2change] = ub[param2change];
+      if (solution(i,param2change)> b->ub[param2change]) 
+        solution(i,param2change) = b->ub[param2change];
         
       /*}*/
       
-      double ObjValSol  = as<double>(objfun(solution));
+      double ObjValSol  = abc_fun(objfun,solution(i,_));
       double FitnessSol = abc_calc_fit(ObjValSol);
       
       /* a greedy selection is applied between the current solution i and its
@@ -290,7 +303,7 @@ void abc_send_onlooker_bees(
         replace the solution with the mutant and reset the trial counter of
         solution i*/
         foods_trl[i]   = 0;
-        foods_pos(i,_) = clone(solution);
+        foods_pos(i,_) = solution(i,_);
         foods_val[i]   = ObjValSol;
         foods_fit[i]   = FitnessSol;
       } /* if the solution i can not be improved, increase its trial counter*/
@@ -306,11 +319,12 @@ void abc_send_onlooker_bees(
 /* determine the food sources whose trial counter exceeds the "limit" value.
 In Basic ABC, only one scout is allowed to occur in each cycle*/
 void abc_send_scout_bees(
-  List Foods,
+  SEXP Foods0,
   Function objfun,
-  double * ub, double * lb,
+  abc_boundaries * b,
   int FoodNumber)
 {
+  List Foods(Foods0);
   NumericVector trials = Foods["trials"];
   int maxtrialindex    = 1;
   int limit            = Foods["limit"];
@@ -318,7 +332,7 @@ void abc_send_scout_bees(
     if (trials[i] > trials[maxtrialindex]) maxtrialindex = i;
   
   if (trials[maxtrialindex] >= limit)
-    abc_init(maxtrialindex, Foods, objfun, lb, ub);
+    abc_init(maxtrialindex, Foods0, objfun, b);
   
   
   return;
@@ -356,14 +370,17 @@ List abc_optimCpp(
     for(int i=0;i<nparam;i++)
       ub0[i] = ub[0];
   
-  double positions[FoodNumber*nparam];
-  List Foods = abc_initialize(FoodNumber, nparam, fn, lb0, ub0, limit, positions);
-  abc_calc_prob(Foods, FoodNumber);
+  abc_boundaries boundaries;
+  for(int i=0;i<nparam;i++)
+  {
+    boundaries.ub[i] = ub0[i];
+    boundaries.lb[i] = lb0[i];
+  }
   
-  for(int i=0;i<FoodNumber;i++)
-    for(int j=0;j<nparam;j++)
-      if ((j+1)==nparam) Rprintf("\t %5.2f\n",positions[i*nparam+j]);
-      else Rprintf("\t %5.2f",positions[i*nparam+j]);
+  SEXP Foods = clone(
+      abc_initialize(FoodNumber, nparam, fn, &boundaries, limit)
+    );
+  abc_calc_prob(Foods, FoodNumber);
  
   /* Memorizes the initial sol */
   int persistance=0;
@@ -377,34 +394,45 @@ List abc_optimCpp(
     /* Checking if the user press break */
     R_CheckUserInterrupt();
     
-    abc_send_empl_bees(Foods, FoodNumber, nparam, lb0, ub0, fn);
+    abc_send_empl_bees(Foods, FoodNumber, nparam, &boundaries, fn);
     // Rprintf("send_empl... Iter %d\n",iter);
     
     abc_calc_prob(Foods, FoodNumber);
     // Rprintf("calc_prob... Iter %d\n",iter);
     
-    abc_send_onlooker_bees(Foods, fn, FoodNumber, nparam, lb0, ub0);
+    abc_send_onlooker_bees(Foods, fn, FoodNumber, nparam, &boundaries);
     // Rprintf("send_onlooker... Iter %d\n",iter);
     
     abc_mem_best_src(Foods, &persistance);
     // Rprintf("mem_best... Iter %d\n",iter);
     
     if (persistance > criter) break;
-    abc_send_scout_bees(Foods, fn, lb0, ub0, FoodNumber);
+    abc_send_scout_bees(Foods, fn, &boundaries, FoodNumber);
     // Rprintf("send_scout... Iter %d\n",iter);
   }
 
+  List Foods0(Foods);
+
   return(
     List::create(
-      _["par"]=Foods["GlobalParams"],
-      _["value"]=Foods["GlobalMin"],
+      _["par"]=Foods0["GlobalParams"],
+      _["value"]=Foods0["GlobalMin"],
       _["counts"]=iter,
       _["persistance"]=persistance
       )
     );
 }
 
+// [[Rcpp::export]]
+double funRcpp(NumericVector x)
+{
+  return -cos(x[0])*cos(x[1])*exp(-(
+    pow(x[0]-M_PI,2.0) + pow(x[1]-M_PI,2.0) ));
+}
+
 /*** R
+
+
 
 fun <- function(x) {
   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
@@ -412,11 +440,30 @@ fun <- function(x) {
 
 library(microbenchmark)
 library(ABCoptim)
+
+message("Funcion en R")
+x1<-abc_optimCpp(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200)
+x2<-abc_optim(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200)
+x1
+x2
+
 microbenchmark(
-  abc_optimCpp(par=rep(0,2), fn=fun, lb=-20,
-               ub=20, criter=100),
-  abc_optim(par=rep(0,2), fn=fun, lb=-20,
-  ub=20, criter=100), times=1)
+  abc_optimCpp(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200),
+  abc_optim(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200),
+  times=1
+  )
+
+message("Funcion en C")
+x1<-abc_optimCpp(par=rep(0,2), fn=funRcpp, lb=-20, ub=20, criter=200)
+x2<-abc_optim(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200)
+x1
+x2
+
+microbenchmark(
+  abc_optimCpp(par=rep(0,2), fn=funRcpp, lb=-20, ub=20, criter=200),
+  abc_optim(par=rep(0,2), fn=fun, lb=-20, ub=20, criter=200),
+  times=1
+  )
 
 
 */
