@@ -1,3 +1,4 @@
+#include <Rinternals.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -70,16 +71,31 @@ void abc_mem_best_src(
 
 	return ;
 }
-
+/*
 // [[Rcpp::export]]
 double abc_fun(Function targetfun, NumericVector par) {
 	return as<double>(targetfun(par));
 }
+*/
+
+double abc_fun(SEXP fn, SEXP par)
+{
+  SEXP R_fcall, ans;
+
+  if(!isFunction(fn)) error("'fn' must be a function");
+  R_fcall = PROTECT(lang2(fn, R_NilValue));
+  
+  SETCADR(R_fcall, par);
+  ans=eval(R_fcall, R_GlobalEnv);
+  UNPROTECT(1);
+  return REAL(ans)[0];
+}
+
 
 SEXP abc_initialize(
   int nfoods,
   int nparam,
-  Function objfun,
+  SEXP objfun,
   abc_boundaries * b,
   int limit
 ) 
@@ -97,7 +113,7 @@ SEXP abc_initialize(
     for(int j=0;j<nparam;j++)
       pos(i,j) = abc_unif(b->lb[j],b->ub[j]);
       
-    val[i]     = as<double>(objfun(pos(i,_)));
+    val[i]     = abc_fun(objfun, wrap(pos(i,_)));
     fitness[i] = abc_calc_fit(val[i]);
   }
   
@@ -118,7 +134,7 @@ SEXP abc_initialize(
 void abc_init(
   int index,
 	SEXP Foods0,
-	Function objfun,
+	SEXP objfun,
 	abc_boundaries * b
 ) {
 	int i,j;
@@ -137,7 +153,7 @@ void abc_init(
 		foods_pos(index,j) = abc_unif(b->lb[j],b->ub[j]);
 	
 	/* Getting the value and */
-	foods_val[index] = abc_fun(objfun, foods_pos(index,_));
+	foods_val[index] = abc_fun(objfun, wrap(foods_pos(index,_)));
 	foods_fit[index] = abc_calc_fit(foods_val[index]);
 	foods_trl[index] = 0;
 
@@ -148,7 +164,7 @@ void abc_send_empl_bees(
   SEXP Foods0, 
   int nfoods, int nparam,
   abc_boundaries * b, 
-  Function objfun
+  SEXP objfun
 ) {
   
 	/* Poiting */
@@ -189,7 +205,7 @@ void abc_send_empl_bees(
     else if (new_foods_pos[param2change] < b->lb[param2change]) 
       new_foods_pos[param2change] = b->lb[param2change];      
     
-    new_val = abc_fun(objfun,new_foods_pos);
+    new_val = abc_fun(objfun, wrap(new_foods_pos));
     new_fit = abc_calc_fit(new_val);
     
     /* Greedy selection */
@@ -232,7 +248,7 @@ void abc_calc_prob(SEXP Foods0,int FoodNumber) {
 /*type double (*ptrFun)(NumericVector x);*/
 void abc_send_onlooker_bees(
   SEXP Foods0, 
-  Function objfun,
+  SEXP objfun,
   int FoodNumber,
   int D,
   abc_boundaries * b
@@ -292,7 +308,7 @@ void abc_send_onlooker_bees(
         
       /*}*/
       
-      double ObjValSol  = abc_fun(objfun,solution(i,_));
+      double ObjValSol  = abc_fun(objfun,wrap(solution(i,_)));
       double FitnessSol = abc_calc_fit(ObjValSol);
       
       /* a greedy selection is applied between the current solution i and its
@@ -320,7 +336,7 @@ void abc_send_onlooker_bees(
 In Basic ABC, only one scout is allowed to occur in each cycle*/
 void abc_send_scout_bees(
   SEXP Foods0,
-  Function objfun,
+  SEXP objfun,
   abc_boundaries * b,
   int FoodNumber)
 {
@@ -340,7 +356,7 @@ void abc_send_scout_bees(
 
 // [[Rcpp::export]]
 List abc_optimCpp(
-  NumericVector par, Function fn,
+  NumericVector par, SEXP fn,
   NumericVector lb = NumericVector::create(1,-DBL_MAX),
   NumericVector ub = NumericVector::create(1,DBL_MAX),
   int FoodNumber   = 20,
