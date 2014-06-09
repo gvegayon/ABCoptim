@@ -1,10 +1,13 @@
 #include <Rcpp.h>
 
+/*#ifndef abcoptim_h
+#define abcoptim_h*/
+
 using namespace Rcpp;
 
 /* Constant definitions */
-#define MAX_FOODNUMBER 100
-#define MAX_D 100
+#define MAX_D 10000
+#define ABC_MAX_LIMIT 1e+300
 typedef double (*ptrFun)(NumericVector x);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,8 +16,8 @@ typedef double (*ptrFun)(NumericVector x);
 
 /* Boundaries */
 struct abc_boundaries {
-  double lb[MAX_FOODNUMBER*MAX_D];
-  double ub[MAX_FOODNUMBER*MAX_D];
+  double lb[MAX_D];
+  double ub[MAX_D];
 } ;
 
 /* Calculates runif */
@@ -338,8 +341,8 @@ double funRcpp(NumericVector x)
 // [[Rcpp::export]]
 List abc_optimCpp(
   NumericVector par,
-  NumericVector lb = NumericVector::create(1,-DBL_MAX),
-  NumericVector ub = NumericVector::create(1,DBL_MAX),
+  NumericVector lb,
+  NumericVector ub,
   int FoodNumber   = 20,
   int limit        = 100,
   int maxCycle     = 1000,
@@ -351,21 +354,30 @@ List abc_optimCpp(
   int nparam = par.size();
   
   /* Boundaries */
+  int lsize=lb.size();
+  int usize=ub.size();
+  
+  if (lsize != usize)
+    stop("Error in boundaries: Sizes do not match");
+  
   double lb0[nparam];
   double ub0[nparam];
-  if (lb.size() == nparam)
+  if (lsize == 1)
+  {
     for(int i=0;i<nparam;i++)
-      lb0[i] = lb[i];
+    {
+          lb0[i] = lb[0];
+          ub0[i] = ub[0];
+    }
+  }
   else
+  {
     for(int i=0;i<nparam;i++)
-      lb0[i] = lb[0];
-  
-  if (ub.size() == nparam)
-    for(int i=0;i<nparam;i++)
-      ub0[i] = ub[i];
-  else
-    for(int i=0;i<nparam;i++)
-      ub0[i] = ub[0];
+    {
+          lb0[i] = lb[i];
+          ub0[i] = ub[i];
+    }
+  }
   
   abc_boundaries boundaries;
   for(int i=0;i<nparam;i++)
@@ -374,9 +386,9 @@ List abc_optimCpp(
     boundaries.lb[i] = lb0[i];
   }
   
-  SEXP Foods = clone(
-      abc_initialize(FoodNumber, nparam, fn, &boundaries, limit)
-    );
+  SEXP Foods;
+  Foods = PROTECT(abc_initialize(FoodNumber, nparam, fn, &boundaries, limit));
+  
   abc_calc_prob(Foods, FoodNumber);
  
   /* Memorizes the initial sol */
@@ -409,13 +421,24 @@ List abc_optimCpp(
   }
 
   List Foods0(Foods);
+  UNPROTECT(1);
+  /* Rebuilding boundaries */
+  NumericVector ubN(nparam);
+  NumericVector lbN(nparam);
+  for(int i=0;i<nparam;i++)
+  {
+    ubN[i] = ub0[i];
+    lbN[i] = lb0[i];
+  }
 
   return(
     List::create(
       _["par"]=Foods0["GlobalParams"],
       _["value"]=Foods0["GlobalMin"],
       _["counts"]=iter,
-      _["persistance"]=persistance
+      _["persistance"]=persistance,
+      _["lb"]=lbN,
+      _["ub"]=ubN
       )
     );
 }
@@ -423,8 +446,6 @@ List abc_optimCpp(
 
 
 /*** R
-
-
 
 fun <- function(x) {
   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
@@ -438,10 +459,11 @@ x1<-abc_optimCpp(par=rep(0,2), lb=-20, ub=20, criter=200)
 x1
 
 microbenchmark(
-  abc_optimCpp(par=rep(0,2), lb=-20, ub=20, criter=200),times=1
+  abc_optimCpp(par=rep(0,2), lb=-20, ub=20, criter=200),times=1000
   )
 
 system.time(abc_optimCpp(par=rep(0,2), lb=-20, ub=20, criter=200))
+
 
 */
 

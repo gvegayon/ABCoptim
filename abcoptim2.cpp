@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 /* Constant definitions */
 #define MAX_FOODNUMBER 100
-#define MAX_D 100
+#define MAX_D 10000
 
 ////////////////////////////////////////////////////////////////////////////////
 /* Structures definition */
@@ -13,18 +13,8 @@ using namespace Rcpp;
 
 /* Boundaries */
 struct abc_boundaries {
-  double lb[MAX_FOODNUMBER*MAX_D];
-  double ub[MAX_FOODNUMBER*MAX_D];
-} ;
-
-/* Food sources */
-struct abc_food {
-  double pos[MAX_FOODNUMBER*MAX_D];
-  double prob[MAX_FOODNUMBER];
-  double val[MAX_FOODNUMBER];
-  double GlobalMin;
-  double GlobalParams[MAX_D];
-  double trials[MAX_D];
+  double lb[MAX_D];
+  double ub[MAX_D];
 };
 
 
