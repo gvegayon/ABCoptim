@@ -1,3 +1,5 @@
+[![Downloads](http://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/web/packages/ABCoptim/index.html)
+
 ABCoptim (alfa)
 ===============
 
