@@ -1,0 +1,4 @@
+2016-11-03  George G. Vega Yon (g.vegayon@gmail.com)
+	* R/*.R: Adding roxygen to the project.
+	* src/abc.cpp: Adding pure C++ version of the function
+	* playground/*: Cleaning up

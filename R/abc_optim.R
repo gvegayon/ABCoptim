@@ -1,5 +1,70 @@
-rm(list=ls())
-
+#' Optimization through ABC algorithm
+#' 
+#' Optimizes through the ABC algorithm
+#' 
+#' This is an implementation of Karaboga (2005) ABC optimization algorithm. It
+#' was developed upon the basic version programmed in \code{C} and distributed
+#' at the algorithm's official website (see the references).
+#' 
+#' By default, lower and upper bounds are set as \code{+-Inf}. This last thing
+#' is just conceptual as all infinite bounds are replaced by
+#' \code{.Machine$double.xmax*1e-10} (still a pretty big number).
+#' 
+#' If \code{D} (the number of parameters to be optimzed) is greater than one,
+#' then \code{lb} and \code{ub} can be either scalars (assuming that all the
+#' parameters share the same boundaries) or vectors (the parameters have
+#' different boundaries each other).
+#' 
+#' @param par Initial values for the parameters to be optimized over
+#' @param fn A function to be minimized, with first argument of the vector of
+#' parameters over which minimization is to take place. It should return a
+#' scalar result.
+#' @param D Number of parameters to be optimized.
+#' @param ... Further arguments to be passed to 'fn'.
+#' @param NP Number of bees.
+#' @param FoodNumber Number of food sources to exploit.
+#' @param lb Lower bound of the parameters to be optimized.
+#' @param ub Upper bound of the parameters to be optimized.
+#' @param limit Limit of a food source.
+#' @param maxCycle Maximum number of iterations.
+#' @param optiinteger Whether to optimize binary parameters or not.
+#' @param criter Stop criteria (numer of unchanged results) until stopping
+#' @return A list containing the optimized parameters (\code{$par}), the value
+#' of the function (\code{$value}) and the number of iterations taken to reach
+#' the optimum (\code{$counts}).
+#' @author George Vega Yon \email{g.vegayon@@gmail.com}
+#' @references D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
+#' Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
+#' Faculty, Computer Engineering Department, 2005
+#' \url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
+#' 
+#' Artificial Bee Colony (ABC) Algorithm (website)
+#' \url{http://mf.erciyes.edu.tr/abc/index.htm}
+#' 
+#' Basic version of the algorithm implemented in \code{C} (ABC's official
+#' website) \url{http://mf.erciyes.edu.tr/abc/form.aspx}
+#' @keywords optimization
+#' @examples
+#' 
+#' # EXAMPLE 1: The minimum is at (pi,pi)
+#' fun <- function(x) {
+#'   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
+#' }
+#' 
+#' abc_optim(rep(0,2), fun, lb=-20, ub=20, criter=100)
+#' 
+#' # EXAMPLE 2: global minimum at about (-15.81515)
+#' fw <- function (x)
+#'   10*sin(0.3*x)*sin(1.3*x^2) + 0.00001*x^4 + 0.2*x+80
+#' 
+#' abc_optim(50, fw, lb=-100, ub=100, criter=100)
+#' 
+#' # EXAMPLE 3: 5D sphere, global minimum at about (0,0,0,0,0)
+#' fs <- function(x) sum(x^2)
+#' 
+#' abc_optim(rep(10,5), fs, lb=-100, ub=100, criter=200)
+#' 
+#' @export abc_optim
 abc_optim <- function(
   par,               # Vector de parametros a opti 
   fn,                # Funcion objetivo
@@ -111,27 +176,24 @@ abc_optim <- function(
   
   SendEmployedBees <- function() {
     for (i in 1:FoodNumber) {
-      r <- runif(1)
       # The parameter to be changed is determined randomly
-      param2change <- floor(r*D) + 1 
+      param2change <- sample(1:D, 1) # floor(runif(1)*D) + 1 
       
       # A randomly chosen solution is used in producing a mutant solution of the solution i
-      neighbour <- floor(r*FoodNumber) + 1 
- 
       # Randomly selected solution must be different from the solution i
+      neighbour <- i
       while(neighbour==i)
-        neighbour <- floor(runif(1)*FoodNumber) + 1
+        neighbour <- sample(1:FoodNumber, 1) # floor(runif(1)*FoodNumber) + 1
       
       solution <<- Foods[i,]
       
       # v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) 
-      r <- runif(1)
-      
-      if (optiinteger) solution[param2change] <<- r > 0.5
+
+      if (optiinteger) solution[param2change] <<- runif(1) > 0.5
       else {
         solution[param2change] <<- 
           Foods[i,param2change]+
-          (Foods[i,param2change]-Foods[neighbour,param2change])*(r-0.5)*2
+          (Foods[i,param2change]-Foods[neighbour,param2change])*(runif(1)-0.5)*2
 
         # if generated parameter value is out of boundaries, it is shifted onto the boundaries
         if (solution[param2change]<lb[param2change])
@@ -182,33 +244,30 @@ abc_optim <- function(
     t <- 0
     while (t < FoodNumber)
     {
-      r <- runif(1)
+
       # choose a food source depending on its probability to be chosen
-      if (r < prob[i]) {
+      if (runif(1) < prob[i]) {
         t <- t + 1
-        r <- runif(1)
-        
+
         # The parameter to be changed is determined randomly
-        param2change <- floor(r*D) + 1
+        param2change <- sample(1:D, 1) # floor(runif(1)*D) + 1 
         
         # A randomly chosen solution is used in producing a mutant solution of the solution i
-        neighbour <- floor(r*FoodNumber) + 1
-        
         #Randomly selected solution must be different from the solution i*/        
+        neighbour <- i
         while(neighbour==i)
-          neighbour <- floor(runif(1)*FoodNumber) + 1
+          neighbour <- sample(1:FoodNumber, 1) # floor(runif(1)*FoodNumber) + 1
 
         solution <<- Foods[i,]
         
         # v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
-        r <- runif(1)
-        
-        if (optiinteger) solution[param2change] <<- r > .5
+
+        if (optiinteger) solution[param2change] <<- runif(1) > .5
         else 
         {
           solution[param2change] <<- 
             Foods[i,param2change]+
-            (Foods[i,param2change]-Foods[neighbour,param2change])*(r-0.5)*2
+            (Foods[i,param2change]-Foods[neighbour,param2change])*(runif(1)-0.5)*2
           
           # if generated parameter value is out of boundaries, it is shifted onto the boundaries*/
           if (solution[param2change]<lb[param2change]) 
@@ -282,59 +341,59 @@ abc_optim <- function(
   
 }
 
-################################################################################
-# Ejemplos
-################################################################################
-
-X <- c(3,2,3,1)
-
-# Funcion de matching
-fun <- function(lambda, x0, X, M)
-{
-  norm((x0 - X)*lambda, type="2") + exp(abs(sum(lambda > 0) - M))
-}
-
-# Mejor vecino para
-#  x0 = 2
-#  X  = c(3,2,3,1)
-#  M  = 1
-# El mejor resultado debe ser [0,1,0,0]
-x1 <- abc_optim(rep(0,4), fun, x0=2, X=X, M=1, lb=0, ub=1, optiinteger=T)
-x1
-
-# Mejores dos vecinos para
-#  x0 = 3
-#  X  = c(3,2,3,1)
-#  M  = 2
-# El mejor resultado debe ser [1,0,1,0]
-x2 <- abc_optim(rep(0,4), fun, x0=3, X=X, M=2, lb=0, ub=1, optiinteger=T)
-x2
-
-################################################################################
-# Definicion de la funcion
-fun <- function(x) {
-  -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
-}
-
-abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
-
-optim(rep(0,2), fn=fun) #lower=-5,upper=5)
-
-################################################################################
-# Definicion de la funcion
-
-fun <- function(x) {
-  -4+(x[1]^2 + x[2]^2)
-}
-
-abc_optim(c(1,1), fn=fun, lb=-100000, ub=100000,criter=100)
-
-################################################################################
-# Definicion de la funcion
-
-fun <- function(x) {
-  -(x^4 - 2*x^2 - 8)
-}
-
-abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
+# ################################################################################
+# # Ejemplos
+# ################################################################################
 # 
+# X <- c(3,2,3,1)
+# 
+# # Funcion de matching
+# fun <- function(lambda, x0, X, M)
+# {
+#   norm((x0 - X)*lambda, type="2") + exp(abs(sum(lambda > 0) - M))
+# }
+# 
+# # Mejor vecino para
+# #  x0 = 2
+# #  X  = c(3,2,3,1)
+# #  M  = 1
+# # El mejor resultado debe ser [0,1,0,0]
+# x1 <- abc_optim(rep(0,4), fun, x0=2, X=X, M=1, lb=0, ub=1, optiinteger=T)
+# x1
+# 
+# # Mejores dos vecinos para
+# #  x0 = 3
+# #  X  = c(3,2,3,1)
+# #  M  = 2
+# # El mejor resultado debe ser [1,0,1,0]
+# x2 <- abc_optim(rep(0,4), fun, x0=3, X=X, M=2, lb=0, ub=1, optiinteger=T)
+# x2
+# 
+# ################################################################################
+# # Definicion de la funcion
+# fun <- function(x) {
+#   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
+# }
+# 
+# abc_optim(rep(0,2), fun, lb=-5, ub=5, criter=50)
+# 
+# optim(rep(0,2), fn=fun) #lower=-5,upper=5)
+# 
+# ################################################################################
+# # Definicion de la funcion
+# 
+# fun <- function(x) {
+#   -4+(x[1]^2 + x[2]^2)
+# }
+# 
+# abc_optim(c(1,1), fn=fun, lb=-100000, ub=100000,criter=100)
+# 
+# ################################################################################
+# # Definicion de la funcion
+# 
+# fun <- function(x) {
+#   -(x^4 - 2*x^2 - 8)
+# }
+# 
+# abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
+# # 
