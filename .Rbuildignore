@@ -13,3 +13,4 @@ source/
 .*\.sh
 ^appveyor\.yml$
 ^\.travis\.yml$
+^codecov\.yml$

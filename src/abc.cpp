@@ -223,14 +223,14 @@ List abc_cpp(
   }
   
   return List::create(
-    _["Foods"]     = Foods,
-    _["f"]         = f,
-    _["fitness"]   = fitness,
-    _["trial"]     = trial,
-    _["GlobalMin"] = GlobalMin,
-    _["GlobalParams"] = GlobalParams,
-    _["counts"]    = i,
-    _["ans"]       = ans
+    _["Foods"]  = Foods,
+    _["f"]      = f,
+    _["fitness"]= fitness,
+    _["trial"]  = trial,
+    _["value"]  = GlobalMin,
+    _["par"]    = GlobalParams,
+    _["counts"] = i,
+    _["hist"]   = ans
   );
 }
 
