@@ -12,15 +12,15 @@ void MemorizeBetsSource(
     double & GlobalMin, NumericVector & GlobalParams,
     NumericVector & f, NumericMatrix & Foods, int & unchanged) {
   
-  int change=0;
+  double GlobalMinOld=GlobalMin;
   for (int i=0;i<f.size(); i++)
     if (f[i] < GlobalMin) {
       GlobalMin    = f[i];
       GlobalParams = Foods(i,_);
-      ++change;
     }
   
-  if (change>0) ++unchanged;
+  if (GlobalMin == GlobalMinOld) ++unchanged;
+  else unchanged = 0;
   
   return;
 }
@@ -92,7 +92,7 @@ void CalculateProbabilities(NumericMatrix & Foods, NumericVector & fitness,
     if (fitness[i] > maxfit) maxfit = fitness[i];
     
   for (int i=0;i<Foods.nrow();i++) 
-    prob[i] = (0.9*(fitness[i]/maxfit)) + 0.1;
+    prob[i] = (0.9*(fitness[i]/(maxfit + 1e-20))) + 0.1;
   
   return;
   
@@ -162,7 +162,7 @@ void SendScoutBees(
     NumericMatrix & Foods, double lb, double ub, int limit) {
   
   int maxtrialindex = 0;
-  for(int i=1;i<Foods.nrow();i++) {
+  for(int i=0;i<Foods.nrow();i++) {
     if (trial[i] > trial[maxtrialindex])
       maxtrialindex = i;
   }
@@ -196,33 +196,41 @@ List abc_cpp(
   NumericVector GlobalParams = clone(par);
   double GlobalMin = as<double>(fn(GlobalParams));
   double num_eval = 0.0;
-  for (int i=0;i<FoodNumber;i++) 
-    init(i, fitness, f, trial, fn, Foods, lb, ub);
 
+  // Should be distributed equally
+  for (int i=0;i<FoodNumber;i++) {
+    
+    for (int j=0;j<par.size();j++)
+      Foods.at(i,j) = lb + (ub - lb)/(FoodNumber-1.0)*i;
+    
+    f[i]       = as<double>(fn(Foods(i,_)));
+    fitness[i] = CalculateFitness(f[i]);
+    trial[i]   = 0;
+  }
+  
   int unchanged = 0;
   MemorizeBetsSource(GlobalMin, GlobalParams, f, Foods, unchanged);
+  ans(0,_) = GlobalParams;
   unchanged = 0;
 
-  // Rprintf("%f",GlobalMin);
-    
   // double OldGlobalMin = GlobalMin;
-  int i=-1;
+  int i=0;
   while (++i<maxCycle) {
     
     SendEmployedBees(GlobalMin, GlobalParams, fitness, f, trial, fn, Foods, lb, ub);
     CalculateProbabilities(Foods, fitness, prob);
     SendOnlookerBees(GlobalMin, GlobalParams, fitness, f, trial, prob, fn, Foods, lb, ub);
     MemorizeBetsSource(GlobalMin, GlobalParams, f, Foods, unchanged);
-    SendScoutBees(fitness, f, trial, prob, fn, Foods, lb, ub, limit);
     
-    // Stop criteria
+    // Storing and breaking
     ans(i,_) = GlobalParams;
-    
-    
     if (unchanged>=criter) break;
+    
+    // If not, then send them out again
+    SendScoutBees(fitness, f, trial, prob, fn, Foods, lb, ub, limit);
   }
   
-  return List::create(
+  List obj = List::create(
     _["Foods"]  = Foods,
     _["f"]      = f,
     _["fitness"]= fitness,
@@ -230,12 +238,16 @@ List abc_cpp(
     _["value"]  = GlobalMin,
     _["par"]    = GlobalParams,
     _["counts"] = i,
-    _["hist"]   = ans
+    _["hist"]   = ans(Range(0,i),_)
   );
+  
+  obj.attr("class") = "abc_answer";
+  
+  return obj;
 }
 
 
-/** *R
+/***R
 fun <- function(x) {
   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 }
@@ -243,17 +255,17 @@ fun <- function(x) {
 library(microbenchmark)
 library(ABCoptim)
 microbenchmark(
-  abc_cpp(c(1,1),fun, upper = 5,lower = -5, criter = 100, MNC = 100, SN = 20)[-8],
+  abc_cpp(c(1,1),fun, ub = 5,lb = -5, criter = 20)[-8],
   abc_optim(c(1,1), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 20), times=100,
   unit="relative"
 )
 
 # ans <- abc_cpp(c(1,1),fun, upper = 50,lower = -50, criter = 50, MNC = 500, SN = 20)
-# 
+#
 # fs <- function(x) sum(x^2)
 # ans <- abc_cpp(rep(500,5), fs, lower = -10, upper=10, criter=200)
 # tail(ans$ans)
-# 
+#
 # plot(ans$ans,type = "l")
 
 */

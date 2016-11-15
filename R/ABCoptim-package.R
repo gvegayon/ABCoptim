@@ -45,6 +45,7 @@ NULL
 #' @useDynLib ABCoptim
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats runif
+#' @importFrom utils str
 NULL
 
 

@@ -1,4 +1,9 @@
-2016-11.08  George G. Vega Yon (g.vegayon@gmail.com)
+2016-11-15  George G. Vega Yon (g.vegayon@gmail.com)
+	* R/abc_optim.R: Improving docs + creating class and changing  the algorithm a
+	  bit.
+	* src/abc.cpp: Now the algorithm has the same start point as abc_cpp.
+
+2016-11-08  George G. Vega Yon (g.vegayon@gmail.com)
 	* Added NEWS.md file.
 
 2016-11-04  George G. Vega Yon (g.vegayon@gmail.com)

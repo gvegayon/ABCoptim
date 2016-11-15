@@ -1,37 +1,49 @@
-#' Optimization through ABC algorithm
+#' Artificial Bee Colony Optimization
 #' 
-#' Optimizes through the ABC algorithm
-#' 
-#' This is an implementation of Karaboga (2005) ABC optimization algorithm. It
-#' was developed upon the basic version programmed in \code{C} and distributed
-#' at the algorithm's official website (see the references).
-#' 
-#' By default, lower and upper bounds are set as \code{+-Inf}. This last thing
-#' is just conceptual as all infinite bounds are replaced by
-#' \code{.Machine$double.xmax*1e-10} (still a pretty big number).
-#' 
-#' If \code{D} (the number of parameters to be optimzed) is greater than one,
-#' then \code{lb} and \code{ub} can be either scalars (assuming that all the
-#' parameters share the same boundaries) or vectors (the parameters have
-#' different boundaries each other).
+#' Implements Karaboga (2005) Artificial Bee Colony (ABC) Optimization algorithm.
 #' 
 #' @param par Initial values for the parameters to be optimized over
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
 #' scalar result.
-#' @param D Number of parameters to be optimized.
 #' @param ... Further arguments to be passed to 'fn'.
-#' @param NP Number of bees.
-#' @param FoodNumber Number of food sources to exploit.
+#' @param FoodNumber Number of food sources to exploit. Notice that the param
+#' \code{NP} has been deprecated.
 #' @param lb Lower bound of the parameters to be optimized.
 #' @param ub Upper bound of the parameters to be optimized.
 #' @param limit Limit of a food source.
 #' @param maxCycle Maximum number of iterations.
 #' @param optiinteger Whether to optimize binary parameters or not.
 #' @param criter Stop criteria (numer of unchanged results) until stopping
-#' @return A list containing the optimized parameters (\code{$par}), the value
-#' of the function (\code{$value}) and the number of iterations taken to reach
-#' the optimum (\code{$counts}).
+#'
+#' @details 
+#' 
+#' This implementation of the ABC algorithm was developed based on the basic
+#' version written in \code{C} and published at the algorithm's official
+#' website (see references).
+#' 
+#' \code{abc_optim} and \code{abc_cpp} are two different implementations of the
+#' algorithm, the former using pure \code{R} code, and the later using \code{C++},
+#' via the \pkg{Rcpp} package. Besides of the output, another important
+#' difference between the two implementations is speed, with \code{abc_cpp}
+#' showing between 50\% and 100\% faster performance.
+#' 
+#' 
+#' If \code{D} (the number of parameters to be optimzed) is greater than one,
+#' then \code{lb} and \code{ub} can be either scalars (assuming that all the
+#' parameters share the same boundaries) or vectors (the parameters have
+#' different boundaries each other).
+#' 
+#' @return An list of class \code{abc_answer}, holding the following elements:
+#' \item{Foods}{Numeric matrix. Last position of the bees.}
+#' \item{f}{Numeric vector. Value of the function evaluated at each set of \code{Foods}.}
+#' \item{fitness}{Numeric vector. Fitness of each \code{Foods}.}
+#' \item{trial}{Integer vector. Number of trials at each \code{Foods}.}
+#' \item{value}{Numeric scalar. Value of the function evaluated at the optimum.}
+#' \item{par}{Numeric vector. Optimum found.}
+#' \item{counts}{Integer scalar. Number of cycles.}
+#' \item{hist}{Numeric matrix. Trace of the global optimums.}
+#' 
 #' @author George Vega Yon \email{g.vegayon@@gmail.com}
 #' @references D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
 #' Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
@@ -46,40 +58,47 @@
 #' @keywords optimization
 #' @examples
 #' 
-#' # EXAMPLE 1: The minimum is at (pi,pi)
+#' # EXAMPLE 1: The minimum is at (pi,pi) ----------------------------------------
 #' fun <- function(x) {
 #'   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 #' }
 #' 
-#' abc_optim(rep(0,2), fun, lb=-20, ub=20, criter=100)
+#' ans0 <- abc_optim(rep(0,2), fun, lb=-10, ub=10, criter=50)
+#' ans0[c("par", "counts", "value")]
+#' 
+#' ans1 <- abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50)
+#' ans1[c("par", "counts", "value")]
 #' 
 #' # EXAMPLE 2: global minimum at about (-15.81515)
 #' fw <- function (x)
 #'   10*sin(0.3*x)*sin(1.3*x^2) + 0.00001*x^4 + 0.2*x+80
 #' 
-#' abc_optim(50, fw, lb=-100, ub=100, criter=100)
+#' ans <- abc_optim(50, fw, lb=-100, ub=100, criter=100)
+#' ans[c("par", "counts", "value")]
 #' 
 #' # EXAMPLE 3: 5D sphere, global minimum at about (0,0,0,0,0)
 #' fs <- function(x) sum(x^2)
 #' 
-#' abc_optim(rep(10,5), fs, lb=-100, ub=100, criter=200)
+#' ans <- abc_optim(rep(10,5), fs, lb=-100, ub=100, criter=200)
+#' ans[c("par", "counts", "value")]
 #' 
 #' @export abc_optim
+#' @aliases abc_answer
 abc_optim <- function(
   par,               # Vector de parametros a opti 
   fn,                # Funcion objetivo
-  D=length(par),     # Numero de parametros
   ...,               # Argumentos de la funcion (M, x0, X, etc.)
-  NP = 40,           # Numero de abejas
-  FoodNumber = NP/2, # Fuentes de alimento 
-  lb = -Inf,         # Limite inferior de recorrido
-  ub = +Inf,         # Limite superior de recorrido
-  limit = 100,        # Limite con que se agota una fuente de alimento
+  FoodNumber = 20,   # Fuentes de alimento 
+  lb = -1e20,        # Limite inferior de recorrido
+  ub = +1e20,        # Limite superior de recorrido
+  limit = 100,       # Limite con que se agota una fuente de alimento
   maxCycle = 1000,   # Numero maximo de iteraciones 
   optiinteger=FALSE, # TRUE si es que queremos optimizar en [0,1] (binario)
   criter=50
 )
 {
+  D <- length(par)
+  
   # Checking limits
   if (length(lb)>0) lb <- rep(lb, D)
   if (length(ub)>0) ub <- rep(ub, D)
@@ -98,8 +117,8 @@ abc_optim <- function(
   FitnessSol  <- double(1)
   neighbour   <- integer(1)
   param2change<- integer(1)
-  GlobalMin   <- double(1)
-  GlobalParams<- double(D)
+  GlobalMin   <- fn(par, ...) # double(1)
+  GlobalParams<- par #double(D)
   #GlobalMins  <- double(runtime)
   r           <- integer(1)
 
@@ -117,42 +136,31 @@ abc_optim <- function(
   # The best food source is memorized
   MemorizeBestSource <- function() 
   {
-    change <- 0
+    oldGlobalMin <- GlobalMin
     for(i in seq(1,FoodNumber)) {
       if (f[i] < GlobalMin) {
-        change <- change + 1
         GlobalMin <<- f[i]
         
         # Replacing new group of parameters
         GlobalParams <<- Foods[i,]
       }
     }
+    
     # Increasing persistance
-    if (!change) persistance <<- persistance + 1
+    if (oldGlobalMin == GlobalMin) persistance <<- persistance + 1
+    else persistance <<- 0
   }
   
   # Variables are initialized in the range [lb,ub]. If each parameter has
   # different range, use arrays lb[j], ub[j] instead of lb and ub 
   # Counters of food sources are also initialized in this function
   
-  init <- function(index, firstinit=FALSE, ...) {
+  init <- function(index, ...) {
     if (optiinteger) Foods[index,] <<- runif(D) > .5
     else {
-      if (!firstinit) {
-        Foods[index,] <<- sapply(1:D, function(k) runif(1,lb[k],ub[k]) )
-      }
-      else {
-        # For the first initialization we set the bees at
-        # specific places equaly distributed through the
-        # bounds.
-        Foods[index,] <<- 
-          sapply(1:D, function(k) {
-            seq(lb[k],ub[k],length.out=FoodNumber)[index]
-          }
-          )
-      }
+      Foods[index,] <<- sapply(1:D, function(k) runif(1,lb[k],ub[k]) )
     }
-    
+
     solution <<- Foods[index,]
     
     f[index] <<- fun(solution)
@@ -164,11 +172,24 @@ abc_optim <- function(
   # init(2)
   
   # All food sources are initialized
-  initial <- function(firstinit=FALSE) {
-    sapply(1:FoodNumber, init, firstinit=firstinit)
+  initial <- function() {
+    # For the first initialization we set the bees at
+    # specific places equaly distributed through the
+    # bounds.
+    Foods <<- 
+      sapply(1:D, function(k) {
+        seq(lb[k],ub[k],length.out=FoodNumber)
+      }
+      )
     
-    GlobalMin <<- f[1]
-    GlobalParams <<- Foods[1,]
+    for (i in 1:FoodNumber) {
+      solution <<- Foods[i,]
+      
+      f[i] <<- fun(solution)
+      
+      fitness[i] <<- CalculateFitness(f[i])
+      trial[i] <<- 0
+    }
   }
   
   # initial()
@@ -233,7 +254,7 @@ abc_optim <- function(
     for (i in 1:FoodNumber) 
       if (fitness[i] > maxfit) maxfit <- fitness[i]
     
-    prob <<- .9*(fitness/maxfit) + .1
+    prob <<- .9*(fitness/(maxfit+1e-20)) + .1
 #     prob[is.nan(prob)]  <<- .1
   }
   
@@ -314,11 +335,12 @@ abc_optim <- function(
   persistance <- 0
   
   # Inicializa funcion
-  initial(firstinit=T)
+  initial()
   
   # Memoriza la primera mejor solucion
   MemorizeBestSource() 
   
+  ans  <- matrix(0, ncol = D, nrow=maxCycle)
   iter <- 0
   # Comienza a iterar
   while ((iter <- iter + 1) < maxCycle)
@@ -327,18 +349,36 @@ abc_optim <- function(
     CalculateProbabilities()
     SendOnlookerBees() 
     MemorizeBestSource()
+    
+    # Storing parameter and breaking out
+    ans[iter,] <- GlobalParams
     if (persistance > criter) break
+    
     SendScoutBees()
   }
 
   return(
-    list(
-      par=GlobalParams,
-      value=fun(GlobalParams),
-      counts=c("function"=iter)
-      )
-    )
+    structure(list(
+      Foods   = Foods,
+      f       = fn,
+      fitness = fitness,
+      trial   = trial,
+      value   = fun(GlobalParams),
+      par     = GlobalParams,
+      counts  = c("function"=iter),
+      hist    = ans[1:iter,,drop=FALSE]
+      ), class="abc_answer"
+    ))
   
+}
+
+#' @export
+#' @param x An object of class \code{abc_answer}.
+#' @rdname abc_optim
+print.abc_answer <- function(x, ...) {
+  cat("An object of class -abc_answer- (Artificial Bee Colony Optim.):")
+  str(x)
+  invisible(x)
 }
 
 # ################################################################################
@@ -397,3 +437,17 @@ abc_optim <- function(
 # 
 # abc_optim(0, fn=fun, lb=-2, ub=2,criter=100)
 # # 
+
+
+# library(microbenchmark)
+# const <- 2
+# fun <- function(x) {
+#   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^const + (x[2] - pi)^const))
+# }
+# 
+# microbenchmark(
+#   ABC_R = abc_optim(rep(0,2), fun, lb=-20, ub=20, criter=20, maxCycle = 20),
+#   ABC_CPP = abc_cpp(rep(0,2), fun, lb=-20, ub=20, criter=20, maxCycle = 20),
+#   times=100
+# )
+

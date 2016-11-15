@@ -1,8 +1,8 @@
 Package: ABCoptim
 Type: Package
 Title: Implementation of Artificial Bee Colony (ABC) Optimization
-Version: 0.2
-Date: 2016-11-08
+Version: 0.20
+Date: 2016-11-15
 Authors@R: c(
   person("George", "Vega Yon", email="g.vegayon@gmail.com", role=c("aut", "cre")),
   person("Enyelbert", "Muñoz", email="enyeldoc2011@gmail.com", role=c("ctb")))
