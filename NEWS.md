@@ -1,4 +1,4 @@
-# Changes in ABCoptim version 0.20 (2016-11-15)
+# Changes in ABCoptim version 0.14.0 (2016-11-16)
 
 * Added a `NEWS.md` file to track changes to the package.
 

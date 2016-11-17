@@ -18,10 +18,6 @@ the algorithm itself)
 
 Please visit the project home for more information:
 \url{https://github.com/gvegayon/ABCoptim}.
-
-\tabular{ll}{ Package: \tab ABCoptim\cr Type: \tab Package\cr Version: \tab
-0.2\cr Date: \tab 2016-11-08\cr License: \tab GPL version 2 or later\cr
-}
 }
 \examples{
 
