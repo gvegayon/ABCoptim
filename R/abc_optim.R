@@ -28,6 +28,8 @@
 #' difference between the two implementations is speed, with \code{abc_cpp}
 #' showing between 50\% and 100\% faster performance.
 #' 
+#' Upper and Lower bounds (\code{ub}, \code{lb}) equal to infinite will be replaced
+#' by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
 #' 
 #' If \code{D} (the number of parameters to be optimzed) is greater than one,
 #' then \code{lb} and \code{ub} can be either scalars (assuming that all the
@@ -89,8 +91,8 @@ abc_optim <- function(
   fn,                # Funcion objetivo
   ...,               # Argumentos de la funcion (M, x0, X, etc.)
   FoodNumber = 20,   # Fuentes de alimento 
-  lb = -1e20,        # Limite inferior de recorrido
-  ub = +1e20,        # Limite superior de recorrido
+  lb = rep(-Inf, length(par)),        # Limite inferior de recorrido
+  ub = rep(+Inf, length(par)),        # Limite superior de recorrido
   limit = 100,       # Limite con que se agota una fuente de alimento
   maxCycle = 1000,   # Numero maximo de iteraciones 
   optiinteger=FALSE, # TRUE si es que queremos optimizar en [0,1] (binario)
@@ -100,11 +102,11 @@ abc_optim <- function(
   D <- length(par)
   
   # Checking limits
-  if (length(lb)>0) lb <- rep(lb, D)
-  if (length(ub)>0) ub <- rep(ub, D)
+  if (length(lb) == 1 && length(par) > 1) lb <- rep(lb, D)
+  if (length(ub) == 1 && length(par) > 1) ub <- rep(ub, D)
 
-  lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
-  ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
+  lb[is.infinite(lb)] <- -.Machine$double.xmax*1e-10
+  ub[is.infinite(ub)] <- .Machine$double.xmax*1e-10
   
   # Initial params
   Foods       <- matrix(double(FoodNumber*D), nrow=FoodNumber)
@@ -451,3 +453,30 @@ print.abc_answer <- function(x, ...) {
 #   times=100
 # )
 
+
+#' @export
+#' @rdname abc_optim
+abc_cpp <- function(
+  par,
+  fn,
+  ...,
+  FoodNumber = 20,   # Fuentes de alimento 
+  lb         = rep(-Inf, length(par)),        # Limite inferior de recorrido
+  ub         = rep(+Inf, length(par)),        # Limite superior de recorrido
+  limit      = 100,       # Limite con que se agota una fuente de alimento
+  maxCycle   = 1000,   # Numero maximo de iteraciones 
+  criter     = 50
+) {
+  
+  # Checking limits
+  if (length(lb)>0) lb <- rep(lb, length(par))
+  if (length(ub)>0) ub <- rep(ub, length(par))
+  
+  lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
+  ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
+  
+  fun <- function(par) fn(par, ...)
+  
+  abc_cpp_(par, fn, lb, ub, FoodNumber, limit, maxCycle, criter)
+  
+}

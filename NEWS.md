@@ -1,4 +1,6 @@
-# Changes in ABCoptim version 0.14.0 (2016-11-16)
+# Changes in ABCoptim version 0.15.999 (2017-01-17)
+
+* `abc_cpp` now checks the domain of the function.
 
 * Added a `NEWS.md` file to track changes to the package.
 

@@ -9,8 +9,12 @@ double CalculateFitness(double x) {
 
 // Sets the current best
 void MemorizeBetsSource(
-    double & GlobalMin, NumericVector & GlobalParams,
-    NumericVector & f, NumericMatrix & Foods, int & unchanged) {
+    double & GlobalMin,
+    NumericVector & GlobalParams,
+    NumericVector & f, 
+    NumericMatrix & Foods,
+    int & unchanged
+  ) {
   
   double GlobalMinOld=GlobalMin;
   for (int i=0;i<f.size(); i++)
@@ -26,12 +30,19 @@ void MemorizeBetsSource(
 }
 
 // Initializes a food source
-void init(int index, NumericVector & fitness, NumericVector & f,
-          IntegerVector & trial,
-          Function & fun,
-          NumericMatrix & Foods, double lb, double ub) {
+void init(
+    int index,
+    NumericVector & fitness,
+    NumericVector & f,
+    IntegerVector & trial,
+    Function & fun,
+    NumericMatrix & Foods,
+    const NumericVector & lb,
+    const NumericVector & ub
+  ) {
 
-  Foods(index,_) = runif(Foods.ncol(), lb, ub);
+  for (int j=0; j<lb.size(); j++)
+    Foods.at(index,j) = runif(1, lb.at(j), ub.at(j))[0];
   
   f[index]       = as<double>(fun(Foods(index,_)));
   fitness[index] = CalculateFitness(f[index]);
@@ -42,11 +53,16 @@ void init(int index, NumericVector & fitness, NumericVector & f,
 
 // Sends employed Bees
 void SendEmployedBees(
-    double & GlobalMin, NumericVector & GlobalParams, 
-    NumericVector & fitness, NumericVector & f,
+    double & GlobalMin,
+    NumericVector & GlobalParams, 
+    NumericVector & fitness,
+    NumericVector & f,
     IntegerVector & trial,
     Function & fun,
-    NumericMatrix & Foods, double lb, double ub) {
+    NumericMatrix & Foods,
+    const NumericVector & lb,
+    const NumericVector & ub
+  ) {
   
   int param2change, neighbour;
   double ObjValSol, FitnessSol;
@@ -66,8 +82,10 @@ void SendEmployedBees(
       (Foods(i, param2change) - Foods(neighbour, param2change))*(unif_rand()-.5)*2;
     
     // Truncating
-    if (solution[param2change] < lb) solution[param2change] = lb;
-    if (solution[param2change] > ub) solution[param2change] = ub;
+    if (solution[param2change] < lb.at(param2change))
+      solution[param2change] = lb.at(param2change);
+    if (solution[param2change] > ub.at(param2change))
+      solution[param2change] = ub.at(param2change);
     
     // Comparing current solution with new one
     ObjValSol  = as<double>(fun(solution));
@@ -85,35 +103,41 @@ void SendEmployedBees(
   return;
 }
 
-void CalculateProbabilities(NumericMatrix & Foods, NumericVector & fitness,
-                            NumericVector & prob) {
+void CalculateProbabilities(
+    NumericMatrix & Foods,
+    NumericVector & fitness,
+    NumericVector & prob
+  ) {
   double maxfit = fitness[0];
   for (int i=0;i<Foods.nrow();i++) 
     if (fitness[i] > maxfit) maxfit = fitness[i];
-    
+  
   for (int i=0;i<Foods.nrow();i++) 
-    prob[i] = (0.9*(fitness[i]/(maxfit + 1e-20))) + 0.1;
+    prob[i] = (0.9*((fitness[i] + 1e-40)/(maxfit + 1e-40))) + 0.1;
   
   return;
   
 }
 
 void SendOnlookerBees(
-    double & GlobalMin, NumericVector & GlobalParams, 
-    NumericVector & fitness, NumericVector & f,
-    IntegerVector & trial, NumericVector & prob,
+    double & GlobalMin,
+    NumericVector & GlobalParams, 
+    NumericVector & fitness,
+    NumericVector & f,
+    IntegerVector & trial,
+    NumericVector & prob,
     Function & fun,
-    NumericMatrix & Foods, double lb, double ub) {
+    NumericMatrix & Foods,
+    const NumericVector & lb,
+    const NumericVector & ub) {
   
   int param2change, neighbour;
   double ObjValSol, FitnessSol;
   NumericVector solution(Foods.ncol());
   
   int t = 0, i=0;
-  double r;
   while (t < Foods.nrow()) {
     // Randomly choose a food source
-    // r = *Foods.nrow();
     if (unif_rand() < prob[i]) {
       t++;
       
@@ -131,8 +155,11 @@ void SendOnlookerBees(
         (Foods(i, param2change) - Foods(neighbour, param2change))*(unif_rand()-.5)*2;
       
       // Truncating
-      if (solution[param2change] < lb) solution[param2change] = lb;
-      if (solution[param2change] > ub) solution[param2change] = ub;
+      if (solution[param2change] < lb.at(param2change))
+        solution[param2change] = lb.at(param2change);
+      
+      if (solution[param2change] > ub.at(param2change))
+        solution[param2change] = ub.at(param2change);
       
       // Comparing current solution with new one
       ObjValSol  = as<double>(fun(solution));
@@ -156,10 +183,16 @@ void SendOnlookerBees(
 }
 
 void SendScoutBees(
-    NumericVector & fitness, NumericVector & f,
-    IntegerVector & trial, NumericVector & prob,
+    NumericVector & fitness,
+    NumericVector & f,
+    IntegerVector & trial,
+    NumericVector & prob,
     Function & fun,
-    NumericMatrix & Foods, double lb, double ub, int limit) {
+    NumericMatrix & Foods,
+    const NumericVector & lb,
+    const NumericVector & ub,
+    int limit
+) {
   
   int maxtrialindex = 0;
   for(int i=0;i<Foods.nrow();i++) {
@@ -174,36 +207,40 @@ void SendScoutBees(
   return;
 }
 
-//' @rdname abc_optim
-//' @export
 // [[Rcpp::export]]
-List abc_cpp(
-    NumericVector & par, Function & fn,
-    double ub= 1e20, double lb=-1e20,
-    int FoodNumber = 20, int limit=100, int maxCycle=1000, int criter=50 // , double tol=1e-10
+List abc_cpp_(
+    NumericVector & par, 
+    Function & fn,
+    const NumericVector & lb,
+    const NumericVector & ub,
+    int FoodNumber   = 20, 
+    int limit        = 100,
+    int maxCycle     = 1000,
+    int criter       = 50 // , double tol=1e-10
 ) {
   
   // Initialize:
-  // double ub = upper, lb=lower;
-
-  NumericMatrix Foods(FoodNumber, par.size());        // Food sources
-  NumericVector f(FoodNumber), fitness(FoodNumber), prob(FoodNumber); // Funval, Fitness Solutions amd Probs
-  IntegerVector trial(FoodNumber);                    // Trial numbers
+  NumericMatrix Foods(FoodNumber, par.size());
+  NumericVector f(FoodNumber), fitness(FoodNumber), prob(FoodNumber);
+  IntegerVector trial(FoodNumber);
   
   NumericMatrix ans(maxCycle, par.size());
 
   // Initializing
   NumericVector GlobalParams = clone(par);
   double GlobalMin = as<double>(fn(GlobalParams));
-  double num_eval = 0.0;
 
   // Should be distributed equally
   for (int i=0;i<FoodNumber;i++) {
     
     for (int j=0;j<par.size();j++)
-      Foods.at(i,j) = lb + (ub - lb)/(FoodNumber-1.0)*i;
+      Foods.at(i,j) = lb.at(j) + (ub.at(j) - lb.at(j))/(FoodNumber-1.0)*i;
     
-    f[i]       = as<double>(fn(Foods(i,_)));
+    // Checking if it is defined
+    f[i] = as<double>(fn(Foods(i,_)));
+    if (NumericVector::is_na(f[i]))
+      stop("Undefined value for -fn-. Check the function's domain.");
+    
     fitness[i] = CalculateFitness(f[i]);
     trial[i]   = 0;
   }
