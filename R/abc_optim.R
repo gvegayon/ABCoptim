@@ -15,6 +15,10 @@
 #' @param maxCycle Maximum number of iterations.
 #' @param optiinteger Whether to optimize binary parameters or not.
 #' @param criter Stop criteria (numer of unchanged results) until stopping
+#' @param parscale Numeric vector of length \code{length(par)}. Scale applied
+#' to the parameters (see \code{\link[stats:optim]{optim}}).
+#' @param fnscale Numeric scalar. Scale applied function. If \code{fnscale < 0},
+#' then the problem becomes a maximization problem (see \code{\link[stats:optim]{optim}}).
 #'
 #' @details 
 #' 
@@ -90,13 +94,15 @@ abc_optim <- function(
   par,               # Vector de parametros a opti 
   fn,                # Funcion objetivo
   ...,               # Argumentos de la funcion (M, x0, X, etc.)
-  FoodNumber = 20,   # Fuentes de alimento 
-  lb = rep(-Inf, length(par)),        # Limite inferior de recorrido
-  ub = rep(+Inf, length(par)),        # Limite superior de recorrido
-  limit = 100,       # Limite con que se agota una fuente de alimento
-  maxCycle = 1000,   # Numero maximo de iteraciones 
-  optiinteger=FALSE, # TRUE si es que queremos optimizar en [0,1] (binario)
-  criter=50
+  FoodNumber  = 20,   # Fuentes de alimento 
+  lb          = rep(-Inf, length(par)),        # Limite inferior de recorrido
+  ub          = rep(+Inf, length(par)),        # Limite superior de recorrido
+  limit       = 100,       # Limite con que se agota una fuente de alimento
+  maxCycle    = 1000,   # Numero maximo de iteraciones 
+  optiinteger = FALSE, # TRUE si es que queremos optimizar en [0,1] (binario)
+  criter      = 50,
+  parscale    = rep(1, 5),
+  fnscale     = 1
 )
 {
   D <- length(par)
@@ -125,7 +131,7 @@ abc_optim <- function(
   r           <- integer(1)
 
   # Fun
-  fun <- function(par) fn(par, ...)
+  fun <- function(par) fn(par/parscale, ...)/fnscale
   
   # Fitness function
   CalculateFitness <- function(fun)
@@ -465,7 +471,9 @@ abc_cpp <- function(
   ub         = rep(+Inf, length(par)),        # Limite superior de recorrido
   limit      = 100,       # Limite con que se agota una fuente de alimento
   maxCycle   = 1000,   # Numero maximo de iteraciones 
-  criter     = 50
+  criter     = 50,
+  parscale   = rep(1, length(par)),
+  fnscale    = 1
 ) {
   
   # Checking limits
@@ -475,8 +483,8 @@ abc_cpp <- function(
   lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
   ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
   
-  fun <- function(par) fn(par, ...)
+  fun <- function(par) fn(par/parscale, ...)/fnscale
   
-  abc_cpp_(par, fn, lb, ub, FoodNumber, limit, maxCycle, criter)
+  abc_cpp_(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
   
 }

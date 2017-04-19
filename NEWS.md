@@ -11,5 +11,6 @@
 
 * Objects of class `abc_answer` return the trace of the global optimums.
 
+* New arguments `parscale` and `fnscale` added (see stats::optim)
 
 
