@@ -101,7 +101,7 @@ abc_optim <- function(
   maxCycle    = 1000,   # Numero maximo de iteraciones 
   optiinteger = FALSE, # TRUE si es que queremos optimizar en [0,1] (binario)
   criter      = 50,
-  parscale    = rep(1, 5),
+  parscale    = rep(1, length(par)),
   fnscale     = 1
 )
 {

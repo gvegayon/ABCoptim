@@ -9,7 +9,8 @@
 \usage{
 abc_optim(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
   ub = rep(+Inf, length(par)), limit = 100, maxCycle = 1000,
-  optiinteger = FALSE, criter = 50, parscale = rep(1, 5), fnscale = 1)
+  optiinteger = FALSE, criter = 50, parscale = rep(1, length(par)),
+  fnscale = 1)
 
 \method{print}{abc_answer}(x, ...)
 
