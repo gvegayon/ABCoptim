@@ -38,7 +38,7 @@
 #' 
 NULL
 
-#' @useDynLib ABCoptim
+#' @useDynLib ABCoptim, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats runif
 #' @importFrom utils str

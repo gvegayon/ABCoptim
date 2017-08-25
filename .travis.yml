@@ -6,7 +6,8 @@ cache: packages
 
 r:
   - release
-#  - devel # Not working
+  - devel
+  - oldrel
 
 os:
   - linux
@@ -20,3 +21,4 @@ env:
 
 after_success:
   - Rscript -e 'covr::codecov()'
+  

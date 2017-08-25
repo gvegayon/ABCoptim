@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 abc_cpp_ <- function(par, fn, lb, ub, FoodNumber = 20L, limit = 100L, maxCycle = 1000L, criter = 50L) {
-    .Call('ABCoptim_abc_cpp_', PACKAGE = 'ABCoptim', par, fn, lb, ub, FoodNumber, limit, maxCycle, criter)
+    .Call(`_ABCoptim_abc_cpp_`, par, fn, lb, ub, FoodNumber, limit, maxCycle, criter)
 }
 

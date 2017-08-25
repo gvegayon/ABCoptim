@@ -28,19 +28,17 @@ set.seed(123)
 abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
 ```
 
-    ## An object of class -abc_answer- (Artificial Bee Colony Optim.):List of 8
-    ##  $ Foods  : num [1:20, 1:2] 3.14 3.14 3.14 3.14 3.14 ...
-    ##  $ f      :function (x)  
-    ##   ..- attr(*, "srcref")=Class 'srcref'  atomic [1:8] 4 8 6 1 8 1 4 6
-    ##   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x37e0ca0> 
-    ##  $ fitness: num [1:20] 2 2 2 2 2 ...
-    ##  $ trial  : num [1:20] 15 29 19 19 16 10 14 39 19 4 ...
-    ##  $ value  : num -1
-    ##  $ par    : num [1:2] 3.14 3.14
-    ##  $ counts : Named num 484
-    ##   ..- attr(*, "names")= chr "function"
-    ##  $ hist   : num [1:484, 1:2] 3.16 3.16 3.16 3.16 3.16 ...
-    ##  - attr(*, "class")= chr "abc_answer"
+    ## 
+    ##  An object of class -abc_answer- (Artificial Bee Colony Optim.):
+    ##  par:
+    ##     x[1]:  3.141593
+    ##     x[2]:  3.141593
+    ## 
+    ##  value:
+    ##           -1.000000
+    ## 
+    ##  counts:
+    ##            484
 
 Authors
 =======
