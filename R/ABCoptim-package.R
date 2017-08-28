@@ -42,6 +42,7 @@ NULL
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats runif
 #' @importFrom utils str
+#' @importFrom graphics plot
 NULL
 
 

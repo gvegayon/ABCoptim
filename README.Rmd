@@ -24,7 +24,7 @@ Please consider that this version is in alpha state of development, thus any evi
 
 # Example
 
-```{r}
+```{r example1}
 library(ABCoptim)
 
 # Function to optimize. Min at (pi,pi)
@@ -37,7 +37,10 @@ fun <- function(x) {
 set.seed(123)
 
 # Finding the minimum
-abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
+ans <- abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
+ans
+
+plot(ans)
 ```
 
 

@@ -15,3 +15,4 @@ source/
 ^\.travis\.yml$
 ^codecov\.yml$
 ^cran-comments\.md$
+^README_files$

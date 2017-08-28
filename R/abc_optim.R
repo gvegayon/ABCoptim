@@ -6,7 +6,8 @@
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
 #' scalar result.
-#' @param ... Further arguments to be passed to 'fn'.
+#' @param ... In the case of \code{abc_*}, further arguments to be passed to 'fn',
+#' otherwise, further arguments passed to the method.
 #' @param FoodNumber Number of food sources to exploit. Notice that the param
 #' \code{NP} has been deprecated.
 #' @param lb Lower bound of the parameters to be optimized.
@@ -70,12 +71,19 @@
 #'   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 #' }
 #' 
-#' ans0 <- abc_optim(rep(0,2), fun, lb=-10, ub=10, criter=50)
-#' ans0[c("par", "counts", "value")]
+#' abc_optim(rep(0,2), fun, lb=-10, ub=10, criter=50)
 #' 
-#' ans1 <- abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50)
-#' ans1[c("par", "counts", "value")]
+#' # This should be equivalent
+#' abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50)
 #' 
+#' # We can also turn this into a maximization problem, and get the same
+#' # results 
+#' fun <- function(x) {
+#'   # We've removed the '-' from the equation
+#'   cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
+#' }
+#' 
+#' abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
 #' 
 #' # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 #' 
@@ -406,7 +414,8 @@ abc_optim <- function(
   return(
     structure(list(
       Foods   = Foods,
-      f       = fn,
+      f       = f,
+      fn      = fn,
       fitness = fitness,
       trial   = trial,
       value   = fun(GlobalParams),
@@ -536,6 +545,51 @@ abc_cpp <- function(
   
   fun <- function(par) fn(par/parscale, ...)/fnscale
   
-  abc_cpp_(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
+  ans <- abc_cpp_(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
+  ans[["fn"]] <- fn
+  
+  structure(
+    ans[c("Foods",  "f",  "fn",  "fitness", "trial",  "value", "par",  "counts",
+  "hist")],
+  class="abc_answer"
+  )
+  
+}
+
+#' @export
+#' @details The \code{plot} method shows the trace of the objective function
+#' as the algorithm unfolds. The line is merely the result of the objective
+#' function evaluated at each point (row) of the \code{hist} matrix return by
+#' \code{abc_optim}/\code{abc_cpp}.
+#' 
+#' For now, the function will return with error if \code{...} was passed to
+#' \code{abc_optim}/\code{abc_cpp}, since those argumens are not stored with the
+#' result.
+#' 
+#' @rdname abc_optim
+#' @param y Ignored
+#' @param main Passed to \code{\link[graphics:plot.default]{plot}}.
+#' @param xlab Passed to \code{\link[graphics:plot.default]{plot}}.
+#' @param ylab Passed to \code{\link[graphics:plot.default]{plot}}.
+#' @param type Passed to \code{\link[graphics:plot.default]{plot}}.
+plot.abc_answer <- function(
+  x,
+  y = NULL,
+  main = "Trace of the Objective Function",
+  xlab = "Number of iteration",
+  ylab = "Value of the objective Function",
+  type = "l",
+  ...) {
+  
+  invisible(
+    graphics::plot(
+      with(x, apply(hist, 1, fn)),
+      type=type,
+      main = main,
+      ylab = ylab,
+      xlab = xlab,
+      ...
+      )
+    )
   
 }

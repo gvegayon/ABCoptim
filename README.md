@@ -25,7 +25,8 @@ fun <- function(x) {
 set.seed(123)
 
 # Finding the minimum
-abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
+ans <- abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
+ans
 ```
 
     ## 
@@ -39,6 +40,12 @@ abc_optim(rep(10,2), fun, lb=-20, ub=20, criter=200)
     ## 
     ##  counts:
     ##            484
+
+``` r
+plot(ans)
+```
+
+![](README_files/figure-markdown_github/example1-1.png)
 
 Authors
 =======

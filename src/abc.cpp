@@ -267,7 +267,7 @@ List abc_cpp_(
     SendScoutBees(fitness, f, trial, prob, fn, Foods, lb, ub, limit);
   }
   
-  List obj = List::create(
+  return List::create(
     _["Foods"]  = Foods,
     _["f"]      = f,
     _["fitness"]= fitness,
@@ -277,10 +277,6 @@ List abc_cpp_(
     _["counts"] = i,
     _["hist"]   = ans(Range(0,i),_)
   );
-  
-  obj.attr("class") = "abc_answer";
-  
-  return obj;
 }
 
 

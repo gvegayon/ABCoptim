@@ -1,4 +1,4 @@
-# Changes in ABCoptim version 0.15.999 (2017-01-17)
+# Changes in ABCoptim version 0.14.999 (dev)
 
 * `abc_cpp` now checks the domain of the function.
 
@@ -13,4 +13,5 @@
 
 * New arguments `parscale` and `fnscale` added (see stats::optim)
 
+* New `print` and `plot` method for `abc_answer` class object.
 

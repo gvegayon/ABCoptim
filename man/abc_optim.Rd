@@ -5,6 +5,7 @@
 \alias{abc_answer}
 \alias{print.abc_answer}
 \alias{abc_cpp}
+\alias{plot.abc_answer}
 \title{Artificial Bee Colony Optimization}
 \usage{
 abc_optim(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
@@ -17,6 +18,10 @@ abc_optim(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
 abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
   ub = rep(+Inf, length(par)), limit = 100, maxCycle = 1000,
   criter = 50, parscale = rep(1, length(par)), fnscale = 1)
+
+\method{plot}{abc_answer}(x, y = NULL,
+  main = "Trace of the Objective Function", xlab = "Number of iteration",
+  ylab = "Value of the objective Function", type = "l", ...)
 }
 \arguments{
 \item{par}{Initial values for the parameters to be optimized over}
@@ -25,7 +30,8 @@ abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
 parameters over which minimization is to take place. It should return a
 scalar result.}
 
-\item{...}{Further arguments to be passed to 'fn'.}
+\item{...}{In the case of \code{abc_*}, further arguments to be passed to 'fn',
+otherwise, further arguments passed to the method.}
 
 \item{FoodNumber}{Number of food sources to exploit. Notice that the param
 \code{NP} has been deprecated.}
@@ -49,6 +55,16 @@ to the parameters (see \code{\link[stats:optim]{optim}}).}
 then the problem becomes a maximization problem (see \code{\link[stats:optim]{optim}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
+
+\item{y}{Ignored}
+
+\item{main}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+
+\item{xlab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+
+\item{ylab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+
+\item{type}{Passed to \code{\link[graphics:plot.default]{plot}}.}
 }
 \value{
 An list of class \code{abc_answer}, holding the following elements:
@@ -82,6 +98,15 @@ If \code{D} (the number of parameters to be optimzed) is greater than one,
 then \code{lb} and \code{ub} can be either scalars (assuming that all the
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).
+
+The \code{plot} method shows the trace of the objective function
+as the algorithm unfolds. The line is merely the result of the objective
+function evaluated at each point (row) of the \code{hist} matrix return by
+\code{abc_optim}/\code{abc_cpp}.
+
+For now, the function will return with error if \code{...} was passed to
+\code{abc_optim}/\code{abc_cpp}, since those argumens are not stored with the
+result.
 }
 \examples{
 
@@ -91,12 +116,19 @@ fun <- function(x) {
   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 }
 
-ans0 <- abc_optim(rep(0,2), fun, lb=-10, ub=10, criter=50)
-ans0[c("par", "counts", "value")]
+abc_optim(rep(0,2), fun, lb=-10, ub=10, criter=50)
 
-ans1 <- abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50)
-ans1[c("par", "counts", "value")]
+# This should be equivalent
+abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50)
 
+# We can also turn this into a maximization problem, and get the same
+# results 
+fun <- function(x) {
+  # We've removed the '-' from the equation
+  cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
+}
+
+abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
 
 # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 
