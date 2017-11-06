@@ -24,6 +24,7 @@
 #' Faculty, Computer Engineering Department, 2005
 #' \url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
 #' 
+#' 
 #' Artificial Bee Colony (ABC) Algorithm (website)
 #' \url{http://mf.erciyes.edu.tr/abc/index.htm}
 #' 
