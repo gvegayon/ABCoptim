@@ -1,3 +1,6 @@
+2017-11-05  George G. Vega Yon (g.vegayon@gmail.com)
+	* Preparing CRAN release.
+
 2017-08-28  George G. Vega Yon (g.vegayon@gmail.com)
 	* R/abc_optim.R: New plot method and fixing ans from abc_cpp.
 	* src/abc.cpp: Returning simply a list.
