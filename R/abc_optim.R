@@ -2,7 +2,7 @@
 #' 
 #' Implements Karaboga (2005) Artificial Bee Colony (ABC) Optimization algorithm.
 #' 
-#' @param par Initial values for the parameters to be optimized over
+#' @param par Numeric vector. Initial values for the parameters to be optimized over
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
 #' scalar result.
@@ -10,12 +10,12 @@
 #' otherwise, further arguments passed to the method.
 #' @param FoodNumber Number of food sources to exploit. Notice that the param
 #' \code{NP} has been deprecated.
-#' @param lb Lower bound of the parameters to be optimized.
-#' @param ub Upper bound of the parameters to be optimized.
-#' @param limit Limit of a food source.
-#' @param maxCycle Maximum number of iterations.
-#' @param optiinteger Whether to optimize binary parameters or not.
-#' @param criter Stop criteria (numer of unchanged results) until stopping
+#' @param lb,ub Numeric vectors or scalars. Upper and lower bounds of the
+#' parameters to be optimized.
+#' @param limit Integer scalar. Limit of a food source.
+#' @param maxCycle Integer scalar. Maximum number of iterations.
+#' @param optiinteger Logical scalar. Whether to optimize binary parameters or not.
+#' @param criter Integer scalar. Stop criteria (numer of unchanged results) until stopping
 #' @param parscale Numeric vector of length \code{length(par)}. Scale applied
 #' to the parameters (see \code{\link[stats:optim]{optim}}).
 #' @param fnscale Numeric scalar. Scale applied function. If \code{fnscale < 0},
@@ -568,10 +568,7 @@ abc_cpp <- function(
 #' 
 #' @rdname abc_optim
 #' @param y Ignored
-#' @param main Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param xlab Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param ylab Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param type Passed to \code{\link[graphics:plot.default]{plot}}.
+#' @param main,xlab,ylab,type Passed to \code{\link[graphics:plot.default]{plot}}.
 plot.abc_answer <- function(
   x,
   y = NULL,

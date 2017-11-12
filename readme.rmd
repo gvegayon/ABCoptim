@@ -10,7 +10,6 @@ output: github_document
 [![Coverage Status](https://img.shields.io/codecov/c/github/gvegayon/ABCoptim/master.svg)](https://codecov.io/github/gvegayon/ABCoptim?branch=master)
 
 
-
 This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
   
 Please consider that this version is in alpha state of development, thus any evident (precision) error should be blamed to the package author (not to the algorithm itself).

@@ -24,7 +24,7 @@ abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
   ylab = "Value of the objective Function", type = "l", ...)
 }
 \arguments{
-\item{par}{Initial values for the parameters to be optimized over}
+\item{par}{Numeric vector. Initial values for the parameters to be optimized over}
 
 \item{fn}{A function to be minimized, with first argument of the vector of
 parameters over which minimization is to take place. It should return a
@@ -36,17 +36,16 @@ otherwise, further arguments passed to the method.}
 \item{FoodNumber}{Number of food sources to exploit. Notice that the param
 \code{NP} has been deprecated.}
 
-\item{lb}{Lower bound of the parameters to be optimized.}
+\item{lb, ub}{Numeric vectors or scalars. Upper and lower bounds of the
+parameters to be optimized.}
 
-\item{ub}{Upper bound of the parameters to be optimized.}
+\item{limit}{Integer scalar. Limit of a food source.}
 
-\item{limit}{Limit of a food source.}
+\item{maxCycle}{Integer scalar. Maximum number of iterations.}
 
-\item{maxCycle}{Maximum number of iterations.}
+\item{optiinteger}{Logical scalar. Whether to optimize binary parameters or not.}
 
-\item{optiinteger}{Whether to optimize binary parameters or not.}
-
-\item{criter}{Stop criteria (numer of unchanged results) until stopping}
+\item{criter}{Integer scalar. Stop criteria (numer of unchanged results) until stopping}
 
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
 to the parameters (see \code{\link[stats:optim]{optim}}).}
@@ -58,13 +57,7 @@ then the problem becomes a maximization problem (see \code{\link[stats:optim]{op
 
 \item{y}{Ignored}
 
-\item{main}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{xlab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{ylab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{type}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot.default]{plot}}.}
 }
 \value{
 An list of class \code{abc_answer}, holding the following elements:
