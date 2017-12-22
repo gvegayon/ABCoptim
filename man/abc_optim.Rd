@@ -48,16 +48,16 @@ parameters to be optimized.}
 \item{criter}{Integer scalar. Stop criteria (numer of unchanged results) until stopping}
 
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
-to the parameters (see \code{\link[stats:optim]{optim}}).}
+to the parameters (see \code{\link[stats:optim:optim]{stats:optim::optim()}}).}
 
-\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale < 0},
-then the problem becomes a maximization problem (see \code{\link[stats:optim]{optim}}).}
+\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale &lt; 0},
+then the problem becomes a maximization problem (see \code{\link[stats:optim:optim]{stats:optim::optim()}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
 
 \item{y}{Ignored}
 
-\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot.default:plot]{graphics:plot.default::plot()}}.}
 }
 \value{
 An list of class \code{abc_answer}, holding the following elements:
@@ -177,13 +177,13 @@ coef(lm(y~0+X))
 D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
 Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
 Faculty, Computer Engineering Department, 2005
-\url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
+http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
 
 Artificial Bee Colony (ABC) Algorithm (website)
-\url{http://mf.erciyes.edu.tr/abc/index.htm}
+http://mf.erciyes.edu.tr/abc/index.htm
 
 Basic version of the algorithm implemented in \code{C} (ABC's official
-website) \url{http://mf.erciyes.edu.tr/abc/form.aspx}
+website) http://mf.erciyes.edu.tr/abc/form.aspx
 }
 \author{
 George Vega Yon \email{g.vegayon@gmail.com}

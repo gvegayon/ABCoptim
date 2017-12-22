@@ -207,8 +207,8 @@ void SendScoutBees(
   return;
 }
 
-// [[Rcpp::export]]
-List abc_cpp_(
+// [[Rcpp::export(name=".abc_cpp")]]
+List abc_cpp(
     NumericVector & par, 
     Function & fn,
     const NumericVector & lb,

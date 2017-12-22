@@ -9,7 +9,7 @@ Authors@R: c(
   )
 Description: An implementation of Karaboga (2005) Artificial Bee Colony
     Optimization algorithm <http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf>.
-    This was developed upon the basic version programmed in C and distributed
+    This was developed upon the basic version programmed in C and available
     at the algorithm's official website.
 Classification/ACM: G.1.6
 Classification/JEL: C61
@@ -26,3 +26,4 @@ Imports:
 RoxygenNote: 6.0.1.9000
 Suggests: testthat,
     covr
+Roxygen: list(markdown = TRUE)
