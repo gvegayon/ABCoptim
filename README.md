@@ -1,11 +1,12 @@
-ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
-================
 
 [![Downloads](http://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/web/packages/ABCoptim/index.html) [![](http://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/web/packages/ABCoptim/index.html) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim) [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim) [![Coverage Status](https://img.shields.io/codecov/c/github/gvegayon/ABCoptim/master.svg)](https://codecov.io/github/gvegayon/ABCoptim?branch=master)
 
+ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
+====================================================================================
+
 This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
 
-Please consider that this version is in alpha state of development, thus any evident (precision) error should be blamed to the package author (not to the algorithm itself).
+Any evident (precision) error should be blamed to the package author (not to the algorithm itself).
 
 Example
 =======
@@ -43,7 +44,7 @@ ans
 plot(ans)
 ```
 
-![](readme_files/figure-markdown_github-ascii_identifiers/example1-1.png)
+![](README_files/figure-markdown_github/example1-1.png)
 
 Authors
 =======

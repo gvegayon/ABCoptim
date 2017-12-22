@@ -48,16 +48,16 @@ parameters to be optimized.}
 \item{criter}{Integer scalar. Stop criteria (numer of unchanged results) until stopping}
 
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
-to the parameters (see \code{\link[stats:optim:optim]{stats:optim::optim()}}).}
+to the parameters (see \code{\link[stats:optim]{stats::optim()}}).}
 
 \item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale &lt; 0},
-then the problem becomes a maximization problem (see \code{\link[stats:optim:optim]{stats:optim::optim()}}).}
+then the problem becomes a maximization problem (see \code{\link[stats:optim]{stats::optim()}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
 
 \item{y}{Ignored}
 
-\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot.default:plot]{graphics:plot.default::plot()}}.}
+\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot]{graphics::plot()}}.}
 }
 \value{
 An list of class \code{abc_answer}, holding the following elements:

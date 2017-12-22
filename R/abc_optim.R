@@ -17,9 +17,9 @@
 #' @param optiinteger Logical scalar. Whether to optimize binary parameters or not.
 #' @param criter Integer scalar. Stop criteria (numer of unchanged results) until stopping
 #' @param parscale Numeric vector of length `length(par)`. Scale applied
-#' to the parameters (see [stats:optim::optim()]).
+#' to the parameters (see [stats::optim()]).
 #' @param fnscale Numeric scalar. Scale applied function. If `fnscale < 0`,
-#' then the problem becomes a maximization problem (see [stats:optim::optim()]).
+#' then the problem becomes a maximization problem (see [stats::optim()]).
 #'
 #' @details 
 #' 
@@ -537,8 +537,8 @@ abc_cpp <- function(
 ) {
   
   # Checking limits
-  if (length(lb)>0) lb <- rep(lb, length(par))
-  if (length(ub)>0) ub <- rep(ub, length(par))
+  if (length(lb) == 1) lb <- rep(lb, length(par))
+  if (length(ub) == 1) ub <- rep(ub, length(par))
   
   lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
   ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
@@ -568,7 +568,7 @@ abc_cpp <- function(
 #' 
 #' @rdname abc_optim
 #' @param y Ignored
-#' @param main,xlab,ylab,type Passed to [graphics:plot.default::plot()].
+#' @param main,xlab,ylab,type Passed to [graphics::plot()].
 plot.abc_answer <- function(
   x,
   y = NULL,
