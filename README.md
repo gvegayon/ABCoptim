@@ -1,3 +1,6 @@
+
+[![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim) [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim) [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
+
 ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
 ====================================================================================
 
