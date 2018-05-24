@@ -11,7 +11,7 @@ output:
 [![](http://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/web/packages/ABCoptim/index.html) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim)
 [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim)
-[![Coverage Status](https://img.shields.io/codecov/c/github/gvegayon/ABCoptim/master.svg)](https://codecov.io/github/gvegayon/ABCoptim?branch=master)
+[![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
 
 ABCoptim (beta)
 ===============
