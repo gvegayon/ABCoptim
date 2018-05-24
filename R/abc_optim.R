@@ -2,66 +2,66 @@
 #' 
 #' Implements Karaboga (2005) Artificial Bee Colony (ABC) Optimization algorithm.
 #' 
-#' @param par Initial values for the parameters to be optimized over
+#' @param par Numeric vector. Initial values for the parameters to be optimized over
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
 #' scalar result.
-#' @param ... In the case of \code{abc_*}, further arguments to be passed to 'fn',
+#' @param ... In the case of `abc_*`, further arguments to be passed to 'fn',
 #' otherwise, further arguments passed to the method.
 #' @param FoodNumber Number of food sources to exploit. Notice that the param
-#' \code{NP} has been deprecated.
-#' @param lb Lower bound of the parameters to be optimized.
-#' @param ub Upper bound of the parameters to be optimized.
-#' @param limit Limit of a food source.
-#' @param maxCycle Maximum number of iterations.
-#' @param optiinteger Whether to optimize binary parameters or not.
-#' @param criter Stop criteria (numer of unchanged results) until stopping
-#' @param parscale Numeric vector of length \code{length(par)}. Scale applied
-#' to the parameters (see \code{\link[stats:optim]{optim}}).
-#' @param fnscale Numeric scalar. Scale applied function. If \code{fnscale < 0},
-#' then the problem becomes a maximization problem (see \code{\link[stats:optim]{optim}}).
+#' `NP` has been deprecated.
+#' @param lb,ub Numeric vectors or scalars. Upper and lower bounds of the
+#' parameters to be optimized.
+#' @param limit Integer scalar. Limit of a food source.
+#' @param maxCycle Integer scalar. Maximum number of iterations.
+#' @param optiinteger Logical scalar. Whether to optimize binary parameters or not.
+#' @param criter Integer scalar. Stop criteria (numer of unchanged results) until stopping
+#' @param parscale Numeric vector of length `length(par)`. Scale applied
+#' to the parameters (see [stats::optim()]).
+#' @param fnscale Numeric scalar. Scale applied function. If `fnscale < 0`,
+#' then the problem becomes a maximization problem (see [stats::optim()]).
 #'
 #' @details 
 #' 
 #' This implementation of the ABC algorithm was developed based on the basic
-#' version written in \code{C} and published at the algorithm's official
+#' version written in `C` and published at the algorithm's official
 #' website (see references).
 #' 
-#' \code{abc_optim} and \code{abc_cpp} are two different implementations of the
-#' algorithm, the former using pure \code{R} code, and the later using \code{C++},
+#' `abc_optim` and `abc_cpp` are two different implementations of the
+#' algorithm, the former using pure `R` code, and the later using `C++`,
 #' via the \pkg{Rcpp} package. Besides of the output, another important
-#' difference between the two implementations is speed, with \code{abc_cpp}
+#' difference between the two implementations is speed, with `abc_cpp`
 #' showing between 50\% and 100\% faster performance.
 #' 
-#' Upper and Lower bounds (\code{ub}, \code{lb}) equal to infinite will be replaced
-#' by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
+#' Upper and Lower bounds (`ub`, `lb`) equal to infinite will be replaced
+#' by either `.Machine$double.xmax` or `-.Machine$double.xmax`.
 #' 
-#' If \code{D} (the number of parameters to be optimzed) is greater than one,
-#' then \code{lb} and \code{ub} can be either scalars (assuming that all the
+#' If `D` (the number of parameters to be optimzed) is greater than one,
+#' then `lb` and `ub` can be either scalars (assuming that all the
 #' parameters share the same boundaries) or vectors (the parameters have
 #' different boundaries each other).
 #' 
-#' @return An list of class \code{abc_answer}, holding the following elements:
+#' @return An list of class `abc_answer`, holding the following elements:
 #' \item{Foods}{Numeric matrix. Last position of the bees.}
-#' \item{f}{Numeric vector. Value of the function evaluated at each set of \code{Foods}.}
-#' \item{fitness}{Numeric vector. Fitness of each \code{Foods}.}
-#' \item{trial}{Integer vector. Number of trials at each \code{Foods}.}
+#' \item{f}{Numeric vector. Value of the function evaluated at each set of `Foods`.}
+#' \item{fitness}{Numeric vector. Fitness of each `Foods`.}
+#' \item{trial}{Integer vector. Number of trials at each `Foods`.}
 #' \item{value}{Numeric scalar. Value of the function evaluated at the optimum.}
 #' \item{par}{Numeric vector. Optimum found.}
 #' \item{counts}{Integer scalar. Number of cycles.}
 #' \item{hist}{Numeric matrix. Trace of the global optimums.}
 #' 
 #' @author George Vega Yon \email{g.vegayon@@gmail.com}
-#' @references D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
-#' Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
+#' @references D. Karaboga, *An Idea based on Honey Bee Swarm for
+#' Numerical Optimization*, tech. report TR06,Erciyes University, Engineering
 #' Faculty, Computer Engineering Department, 2005
-#' \url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
+#' http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
 #' 
 #' Artificial Bee Colony (ABC) Algorithm (website)
-#' \url{http://mf.erciyes.edu.tr/abc/index.htm}
+#' http://mf.erciyes.edu.tr/abc/index.htm
 #' 
-#' Basic version of the algorithm implemented in \code{C} (ABC's official
-#' website) \url{http://mf.erciyes.edu.tr/abc/form.aspx}
+#' Basic version of the algorithm implemented in `C` (ABC's official
+#' website) http://mf.erciyes.edu.tr/abc/form.aspx
 #' @keywords optimization
 #' @examples
 #' 
@@ -428,7 +428,7 @@ abc_optim <- function(
 }
 
 #' @export
-#' @param x An object of class \code{abc_answer}.
+#' @param x An object of class `abc_answer`.
 #' @rdname abc_optim
 print.abc_answer <- function(x, ...) {
   cat("\n")
@@ -537,15 +537,15 @@ abc_cpp <- function(
 ) {
   
   # Checking limits
-  if (length(lb)>0) lb <- rep(lb, length(par))
-  if (length(ub)>0) ub <- rep(ub, length(par))
+  if (length(lb) == 1) lb <- rep(lb, length(par))
+  if (length(ub) == 1) ub <- rep(ub, length(par))
   
   lb[is.infinite(lb)] <- -(.Machine$double.xmax*1e-10)
   ub[is.infinite(ub)] <- +(.Machine$double.xmax*1e-10)
   
   fun <- function(par) fn(par/parscale, ...)/fnscale
   
-  ans <- abc_cpp_(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
+  ans <- .abc_cpp(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
   ans[["fn"]] <- fn
   
   structure(
@@ -557,21 +557,18 @@ abc_cpp <- function(
 }
 
 #' @export
-#' @details The \code{plot} method shows the trace of the objective function
+#' @details The `plot` method shows the trace of the objective function
 #' as the algorithm unfolds. The line is merely the result of the objective
-#' function evaluated at each point (row) of the \code{hist} matrix return by
-#' \code{abc_optim}/\code{abc_cpp}.
+#' function evaluated at each point (row) of the `hist` matrix return by
+#' `abc_optim`/`abc_cpp`.
 #' 
-#' For now, the function will return with error if \code{...} was passed to
-#' \code{abc_optim}/\code{abc_cpp}, since those argumens are not stored with the
+#' For now, the function will return with error if `...` was passed to
+#' `abc_optim`/`abc_cpp`, since those argumens are not stored with the
 #' result.
 #' 
 #' @rdname abc_optim
 #' @param y Ignored
-#' @param main Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param xlab Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param ylab Passed to \code{\link[graphics:plot.default]{plot}}.
-#' @param type Passed to \code{\link[graphics:plot.default]{plot}}.
+#' @param main,xlab,ylab,type Passed to [graphics::plot()].
 plot.abc_answer <- function(
   x,
   y = NULL,

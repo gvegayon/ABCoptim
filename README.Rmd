@@ -1,10 +1,5 @@
 ---
-title: "README"
-author: "George G. Vega Yon"
-date: paste("Compiled on", Sys.date())
-output: 
-  md_document:
-    variant: markdown_github
+output: github_document
 ---
 
 [![Downloads](http://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/web/packages/ABCoptim/index.html)
@@ -13,14 +8,11 @@ output:
 [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim)
 [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
 
-ABCoptim (beta)
-===============
-
-An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
+# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
 
 This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
   
-Please consider that this version is in alpha state of development, thus any evident (precision) error should be blaimed to the package author (not to the algorithm itself).
+Any evident (precision) error should be blamed to the package author (not to the algorithm itself).
 
 # Example
 

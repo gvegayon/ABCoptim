@@ -4,10 +4,9 @@
 R/abc\.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
-README\.md
-README\.Rmd
+readme\.md
+readme\.Rmd
 ^playground$
-LICENSE
 \.git/
 source/
 .*\.sh
@@ -15,4 +14,5 @@ source/
 ^\.travis\.yml$
 ^codecov\.yml$
 ^cran-comments\.md$
-^README_files$
+^readme_files$
+^docs$

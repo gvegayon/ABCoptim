@@ -1,21 +1,22 @@
 Package: ABCoptim
 Type: Package
 Title: Implementation of Artificial Bee Colony (ABC) Optimization
-Version: 0.14.999
-Date: 2017-08-28
+Version: 0.15.9999
+Date: 2017-11-05
 Authors@R: c(
-  person("George", "Vega Yon", email="g.vegayon@gmail.com", role=c("aut", "cre")),
-  person("Enyelbert", "Muñoz", email="enyeldoc2011@gmail.com", role=c("ctb")))
+  person("George", "Vega Yon", email="g.vegayon@gmail.com", role=c("aut", "cre"),
+	comment = c(ORCID = "0000-0002-3171-0844"),
+  person("Enyelbert", "Muñoz", email="enyeldoc2011@gmail.com", role=c("ctb"))
+  )
 Description: An implementation of Karaboga (2005) Artificial Bee Colony
     Optimization algorithm <http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf>.
-    This (working) version is a Work-in-progress, which is
-    why it has been implemented using pure R code. This was developed upon the basic
-    version programmed in C and distributed at the algorithm's official website.
+    This was developed upon the basic version programmed in C and available
+    at the algorithm's official website.
 Classification/ACM: G.1.6
 Classification/JEL: C61
 Encoding: UTF-8
 URL: http://github.com/gvegayon/ABCoptim, http://mf.erciyes.edu.tr/abc/
-License: GPL (>= 3)
+License: MIT + file LICENSE
 LazyLoad: yes
 LinkingTo: Rcpp
 Imports:
@@ -23,6 +24,7 @@ Imports:
     graphics,
     stats,
     utils
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 Suggests: testthat,
     covr
+Roxygen: list(markdown = TRUE)

@@ -24,7 +24,7 @@ abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
   ylab = "Value of the objective Function", type = "l", ...)
 }
 \arguments{
-\item{par}{Initial values for the parameters to be optimized over}
+\item{par}{Numeric vector. Initial values for the parameters to be optimized over}
 
 \item{fn}{A function to be minimized, with first argument of the vector of
 parameters over which minimization is to take place. It should return a
@@ -36,35 +36,28 @@ otherwise, further arguments passed to the method.}
 \item{FoodNumber}{Number of food sources to exploit. Notice that the param
 \code{NP} has been deprecated.}
 
-\item{lb}{Lower bound of the parameters to be optimized.}
+\item{lb, ub}{Numeric vectors or scalars. Upper and lower bounds of the
+parameters to be optimized.}
 
-\item{ub}{Upper bound of the parameters to be optimized.}
+\item{limit}{Integer scalar. Limit of a food source.}
 
-\item{limit}{Limit of a food source.}
+\item{maxCycle}{Integer scalar. Maximum number of iterations.}
 
-\item{maxCycle}{Maximum number of iterations.}
+\item{optiinteger}{Logical scalar. Whether to optimize binary parameters or not.}
 
-\item{optiinteger}{Whether to optimize binary parameters or not.}
-
-\item{criter}{Stop criteria (numer of unchanged results) until stopping}
+\item{criter}{Integer scalar. Stop criteria (numer of unchanged results) until stopping}
 
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
-to the parameters (see \code{\link[stats:optim]{optim}}).}
+to the parameters (see \code{\link[stats:optim]{stats::optim()}}).}
 
-\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale < 0},
-then the problem becomes a maximization problem (see \code{\link[stats:optim]{optim}}).}
+\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale &lt; 0},
+then the problem becomes a maximization problem (see \code{\link[stats:optim]{stats::optim()}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
 
 \item{y}{Ignored}
 
-\item{main}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{xlab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{ylab}{Passed to \code{\link[graphics:plot.default]{plot}}.}
-
-\item{type}{Passed to \code{\link[graphics:plot.default]{plot}}.}
+\item{main, xlab, ylab, type}{Passed to \code{\link[graphics:plot]{graphics::plot()}}.}
 }
 \value{
 An list of class \code{abc_answer}, holding the following elements:
@@ -184,13 +177,13 @@ coef(lm(y~0+X))
 D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
 Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
 Faculty, Computer Engineering Department, 2005
-\url{http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf}
+http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
 
 Artificial Bee Colony (ABC) Algorithm (website)
-\url{http://mf.erciyes.edu.tr/abc/index.htm}
+http://mf.erciyes.edu.tr/abc/index.htm
 
 Basic version of the algorithm implemented in \code{C} (ABC's official
-website) \url{http://mf.erciyes.edu.tr/abc/form.aspx}
+website) http://mf.erciyes.edu.tr/abc/form.aspx
 }
 \author{
 George Vega Yon \email{g.vegayon@gmail.com}
