@@ -1,30 +1,40 @@
-Package: ABCoptim
 Type: Package
-Title: Implementation of Artificial Bee Colony (ABC) Optimization
+Package: ABCoptim
+Title: Implementation of Artificial Bee Colony (ABC)
+    Optimization
 Version: 0.15.9999
 Date: 2017-11-05
-Authors@R: c(
-  person("George", "Vega Yon", email="g.vegayon@gmail.com", role=c("aut", "cre"),
-	comment = c(ORCID = "0000-0002-3171-0844"),
-  person("Enyelbert", "Muñoz", email="enyeldoc2011@gmail.com", role=c("ctb"))
-  )
-Description: An implementation of Karaboga (2005) Artificial Bee Colony
-    Optimization algorithm <http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf>.
-    This was developed upon the basic version programmed in C and available
-    at the algorithm's official website.
-Classification/ACM: G.1.6
-Classification/JEL: C61
-Encoding: UTF-8
-URL: http://github.com/gvegayon/ABCoptim, http://mf.erciyes.edu.tr/abc/
+Authors@R: 
+    c(person(given = "George",
+             family = "Vega Yon",
+             role = c("aut", "cre"),
+             email = "g.vegayon@gmail.com",
+             comment = structure("0000-0002-3171-0844", .Names = "ORCID")),
+      person(given = "Enyelbert",
+             family = "Muñoz",
+             role = "ctb",
+             email = "enyeldoc2011@gmail.com"))
+Description: An implementation of Karaboga (2005) Artificial Bee
+    Colony Optimization algorithm
+    <http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf>.  This was developed
+    upon the basic version programmed in C and available at the
+    algorithm's official website.
 License: MIT + file LICENSE
-LazyLoad: yes
-LinkingTo: Rcpp
+URL: http://github.com/gvegayon/ABCoptim,
+    http://mf.erciyes.edu.tr/abc/
 Imports:
     Rcpp,
     graphics,
     stats,
     utils
-RoxygenNote: 6.0.1.9000
-Suggests: testthat,
+Suggests: 
+    testthat,
     covr
+LinkingTo: 
+    Rcpp
+Classification/ACM: G.1.6
+Classification/JEL: C61
+Encoding: UTF-8
+LazyLoad: yes
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1.9000
