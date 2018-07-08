@@ -82,7 +82,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/gvegayon/ABCoptim">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -96,7 +101,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Artificial Bee Colony Optimization</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/gvegayon/ABCoptim/blob/master/R/abc_optim.R'><code>R/abc_optim.R</code></a></small>
     <div class="hidden name"><code>abc_optim.Rd</code></div>
     </div>
 
@@ -216,8 +221,7 @@ difference between the two implementations is speed, with <code>abc_cpp</code>
 showing between 50% and 100% faster performance.</p>
 <p>Upper and Lower bounds (<code>ub</code>, <code>lb</code>) equal to infinite will be replaced
 by either <code>.Machine$double.xmax</code> or <code>-.Machine$double.xmax</code>.</p>
-<p>If <code>D</code> (the number of parameters to be optimzed) is greater than one,
-then <code>lb</code> and <code>ub</code> can be either scalars (assuming that all the
+<p><code>lb</code> and <code>ub</code> can be either scalars (assuming that all the
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).</p>
 <p>The <code>plot</code> method shows the trace of the objective function
