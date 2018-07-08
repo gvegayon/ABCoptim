@@ -1,8 +1,8 @@
 
-[![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim) [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim) [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
+[![CRAN status](https://www.r-pkg.org/badges/version/ABCoptim)](https://cran.r-project.org/package=ABCoptim) [![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim) [![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim) [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
-ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm (R-package)
-====================================================================================
+ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm
+========================================================================
 
 This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
 
@@ -45,13 +45,6 @@ plot(ans)
 ```
 
 ![](README_files/figure-markdown_github/example1-1.png)
-
-Authors
-=======
-
-George G. Vega Yon \[aut\]
-
-Enyelbert Muñoz \[cnt\]
 
 References
 ==========

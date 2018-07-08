@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Artificial Bee Colony Optimization — abc_optim" />
+
+<meta property="og:description" content="Implements Karaboga (2005) Artificial Bee Colony (ABC) Optimization algorithm." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">ABCoptim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">ABCoptim</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.15.9999</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -61,18 +77,14 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/gvegayon/ABCoptim">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -80,15 +92,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Artificial Bee Colony Optimization</h1>
+    
+    <div class="hidden name"><code>abc_optim.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Implements Karaboga (2005) Artificial Bee Colony (ABC) Optimization algorithm.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>abc_optim</span>(<span class='no'>par</span>, <span class='no'>fn</span>, <span class='no'>...</span>, <span class='kw'>FoodNumber</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>lb</span> <span class='kw'>=</span> <span class='fu'>rep</span>(-<span class='fl'>Inf</span>, <span class='fu'>length</span>(<span class='no'>par</span>)),
   <span class='kw'>ub</span> <span class='kw'>=</span> <span class='fu'>rep</span>(+<span class='fl'>Inf</span>, <span class='fu'>length</span>(<span class='no'>par</span>)), <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>maxCycle</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
@@ -107,7 +123,7 @@
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Trace of the Objective Function"</span>, <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Number of iteration"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Value of the objective Function"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -154,12 +170,12 @@ parameters to be optimized.</p></td>
     <tr>
       <th>parscale</th>
       <td><p>Numeric vector of length <code>length(par)</code>. Scale applied
-to the parameters (see <code>stats:optim::optim()</code>).</p></td>
+to the parameters (see <code><a href='http://www.rdocumentation.org/packages/stats/topics/optim'>stats::optim()</a></code>).</p></td>
     </tr>
     <tr>
       <th>fnscale</th>
-      <td><p>Numeric scalar. Scale applied function. If <code>fnscale &amp;lt; 0</code>,
-then the problem becomes a maximization problem (see <code>stats:optim::optim()</code>).</p></td>
+      <td><p>Numeric scalar. Scale applied function. If <code>fnscale &lt; 0</code>,
+then the problem becomes a maximization problem (see <code><a href='http://www.rdocumentation.org/packages/stats/topics/optim'>stats::optim()</a></code>).</p></td>
     </tr>
     <tr>
       <th>x</th>
@@ -171,7 +187,7 @@ then the problem becomes a maximization problem (see <code>stats:optim::optim()<
     </tr>
     <tr>
       <th>main, xlab, ylab, type</th>
-      <td><p>Passed to <code>graphics:plot.default::plot()</code>.</p></td>
+      <td><p>Passed to <code><a href='http://www.rdocumentation.org/packages/graphics/topics/plot'>graphics::plot()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -192,8 +208,8 @@ then the problem becomes a maximization problem (see <code>stats:optim::optim()<
 
     <p>This implementation of the ABC algorithm was developed based on the basic
 version written in <code>C</code> and published at the algorithm's official
-website (see references).
-    <code>abc_optim</code> and <code>abc_cpp</code> are two different implementations of the
+website (see references).</p>
+<p><code>abc_optim</code> and <code>abc_cpp</code> are two different implementations of the
 algorithm, the former using pure <code>R</code> code, and the later using <code>C++</code>,
 via the <span class="pkg">Rcpp</span> package. Besides of the output, another important
 difference between the two implementations is speed, with <code>abc_cpp</code>
@@ -370,11 +386,14 @@ George Vega Yon <a href='mailto:g.vegayon@gmail.com'>g.vegayon@gmail.com</a>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

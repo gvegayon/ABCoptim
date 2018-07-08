@@ -50,7 +50,7 @@ parameters to be optimized.}
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
 to the parameters (see \code{\link[stats:optim]{stats::optim()}}).}
 
-\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale &lt; 0},
+\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale < 0},
 then the problem becomes a maximization problem (see \code{\link[stats:optim]{stats::optim()}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
@@ -87,8 +87,7 @@ showing between 50\% and 100\% faster performance.
 Upper and Lower bounds (\code{ub}, \code{lb}) equal to infinite will be replaced
 by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
 
-If \code{D} (the number of parameters to be optimzed) is greater than one,
-then \code{lb} and \code{ub} can be either scalars (assuming that all the
+\code{lb} and \code{ub} can be either scalars (assuming that all the
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).
 

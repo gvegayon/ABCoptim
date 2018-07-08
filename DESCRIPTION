@@ -3,7 +3,7 @@ Package: ABCoptim
 Title: Implementation of Artificial Bee Colony (ABC)
     Optimization
 Version: 0.15.9999
-Date: 2017-11-05
+Date: 2018-07-07
 Authors@R: 
     c(person(given = "George",
              family = "Vega Yon",
@@ -20,8 +20,9 @@ Description: An implementation of Karaboga (2005) Artificial Bee
     upon the basic version programmed in C and available at the
     algorithm's official website.
 License: MIT + file LICENSE
-URL: http://github.com/gvegayon/ABCoptim,
+URL: https://gvegayon.github.io/ABCoptim,
     http://mf.erciyes.edu.tr/abc/
+BugReports: https://github.com/gvegayon/ABCoptim/issues
 Imports:
     Rcpp,
     graphics,
@@ -37,4 +38,4 @@ Classification/JEL: C61
 Encoding: UTF-8
 LazyLoad: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.0.1

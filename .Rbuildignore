@@ -16,3 +16,5 @@ source/
 ^cran-comments\.md$
 ^readme_files$
 ^docs$
+^paper$
+^LICENSE\.md$
