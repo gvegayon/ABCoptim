@@ -519,7 +519,6 @@ print.abc_answer <- function(x, ...) {
 #   times=100
 # )
 
-
 #' @export
 #' @rdname abc_optim
 abc_cpp <- function(
@@ -547,6 +546,9 @@ abc_cpp <- function(
   
   ans <- .abc_cpp(par, fun, lb, ub, FoodNumber, limit, maxCycle, criter)
   ans[["fn"]] <- fn
+  
+  ans$Foods <- do.call(rbind, ans$Foods)
+  ans$hist  <- do.call(rbind, ans$hist)
   
   structure(
     ans[c("Foods",  "f",  "fn",  "fitness", "trial",  "value", "par",  "counts",
