@@ -8,20 +8,46 @@
 \alias{plot.abc_answer}
 \title{Artificial Bee Colony Optimization}
 \usage{
-abc_optim(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
-  ub = rep(+Inf, length(par)), limit = 100, maxCycle = 1000,
-  optiinteger = FALSE, criter = 50, parscale = rep(1, length(par)),
-  fnscale = 1)
+abc_optim(
+  par,
+  fn,
+  ...,
+  FoodNumber = 20,
+  lb = rep(-Inf, length(par)),
+  ub = rep(+Inf, length(par)),
+  limit = 100,
+  maxCycle = 1000,
+  optiinteger = FALSE,
+  criter = 50,
+  parscale = rep(1, length(par)),
+  fnscale = 1
+)
 
 \method{print}{abc_answer}(x, ...)
 
-abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
-  ub = rep(+Inf, length(par)), limit = 100, maxCycle = 1000,
-  criter = 50, parscale = rep(1, length(par)), fnscale = 1)
+abc_cpp(
+  par,
+  fn,
+  ...,
+  FoodNumber = 20,
+  lb = rep(-Inf, length(par)),
+  ub = rep(+Inf, length(par)),
+  limit = 100,
+  maxCycle = 1000,
+  criter = 50,
+  parscale = rep(1, length(par)),
+  fnscale = 1
+)
 
-\method{plot}{abc_answer}(x, y = NULL,
-  main = "Trace of the Objective Function", xlab = "Number of iteration",
-  ylab = "Value of the objective Function", type = "l", ...)
+\method{plot}{abc_answer}(
+  x,
+  y = NULL,
+  main = "Trace of the Objective Function",
+  xlab = "Number of iteration",
+  ylab = "Value of the objective Function",
+  type = "l",
+  ...
+)
 }
 \arguments{
 \item{par}{Numeric vector. Initial values for the parameters to be optimized over}
@@ -30,7 +56,7 @@ abc_cpp(par, fn, ..., FoodNumber = 20, lb = rep(-Inf, length(par)),
 parameters over which minimization is to take place. It should return a
 scalar result.}
 
-\item{...}{In the case of \code{abc_*}, further arguments to be passed to 'fn',
+\item{...}{In the case of \verb{abc_*}, further arguments to be passed to 'fn',
 otherwise, further arguments passed to the method.}
 
 \item{FoodNumber}{Number of food sources to exploit. Notice that the param
@@ -50,7 +76,7 @@ parameters to be optimized.}
 \item{parscale}{Numeric vector of length \code{length(par)}. Scale applied
 to the parameters (see \code{\link[stats:optim]{stats::optim()}}).}
 
-\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale &lt; 0},
+\item{fnscale}{Numeric scalar. Scale applied function. If \code{fnscale < 0},
 then the problem becomes a maximization problem (see \code{\link[stats:optim]{stats::optim()}}).}
 
 \item{x}{An object of class \code{abc_answer}.}
@@ -79,10 +105,10 @@ version written in \code{C} and published at the algorithm's official
 website (see references).
 
 \code{abc_optim} and \code{abc_cpp} are two different implementations of the
-algorithm, the former using pure \code{R} code, and the later using \code{C++},
+algorithm, the former using pure \code{R} code, and the later using \verb{C++},
 via the \pkg{Rcpp} package. Besides of the output, another important
 difference between the two implementations is speed, with \code{abc_cpp}
-showing between 50\% and 100\% faster performance.
+showing between 50\\% and 100\\% faster performance.
 
 Upper and Lower bounds (\code{ub}, \code{lb}) equal to infinite will be replaced
 by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
