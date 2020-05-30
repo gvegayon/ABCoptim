@@ -109,18 +109,20 @@ inline BeeHive<Input_type>::BeeHive(
 ) : fn(fn_), lb(lb_), ub(ub_), FoodNumber(FoodNumber_),
   Npar(GlobalParams_.size()), limit(limit_),
   maxCycle(maxCycle_), criter(criter_),
-  Foods(FoodNumber_, GlobalParams_), f(FoodNumber_), prob(FoodNumber_), trial(FoodNumber_),
-  fitness(FoodNumber_), GlobalParams(GlobalParams_) {
+  Foods(FoodNumber_), f(FoodNumber_), prob(FoodNumber_), trial(FoodNumber_),
+  fitness(FoodNumber_), GlobalParams(GlobalParams_.size()), solution(GlobalParams_.size()){
   
   // Making room
   ans.reserve(maxCycle);
   
   // Initializing
+  GlobalParams = clone(GlobalParams_);
   GlobalMin = as<double>(fn(GlobalParams));
   
   // Should be distributed equally
   for (unsigned int i = 0u; i < FoodNumber; ++i) {
     // Rprintf("Iteration %i\n", i);
+    Foods[i] = clone(GlobalParams);
     
     for (unsigned int j = 0u; j < Npar; ++j)
       Foods[i][j] = lb[j] + (ub[j] - lb[j])/(FoodNumber - 1.0)*i;
@@ -157,7 +159,9 @@ inline void BeeHive<Input_type>::MemorizeBetsSource() {
   for (unsigned int i = 0u; i < FoodNumber; ++i)
     if (f[i] < GlobalMin) {
       GlobalMin    = f[i];
-      GlobalParams = clone(Foods[i]);
+      
+      for (unsigned int ii = 0u; ii < Npar; ++ii)
+        GlobalParams[ii] = Foods[i][ii];
     }
   
   if (GlobalMin == GlobalMinOld)
@@ -197,7 +201,9 @@ inline void BeeHive<Input_type>::SendEmployedBees() {
       neighbour++;
     
     // Suggesting new solution
-    solution = clone(Foods[i]);
+    for (unsigned int ii = 0u; ii < Npar; ++ii)
+      solution[ii] = Foods[i][ii];
+
     solution[param2change] = Foods[i][param2change] + 
       (
           Foods[i][param2change] -
@@ -216,10 +222,10 @@ inline void BeeHive<Input_type>::SendEmployedBees() {
     FitnessSol = CalculateFitness(ObjValSol);
     if (FitnessSol > fitness[i]) {
       
-      std::swap(Foods[i], solution);
+      Foods[i][param2change] = solution[param2change];
       fitness[i] = FitnessSol;
       f[i]       = ObjValSol;
-      trial[i]   = 0;
+      trial[i]   = 0u;
       
     } else 
       ++trial[i];
@@ -261,7 +267,9 @@ inline void BeeHive<Input_type>::SendOnlookerBees() {
         neighbour++;
       
       // Suggesting new solution
-      solution = clone(Foods[i]);
+      for (unsigned int ii = 0; ii < Npar; ++ii)
+        solution[ii] = Foods[i][ii];
+      
       solution[param2change] = Foods[i][param2change] + 
         (
             Foods[i][param2change] -
@@ -281,7 +289,9 @@ inline void BeeHive<Input_type>::SendOnlookerBees() {
       
       if (FitnessSol > fitness[i]) {
         
-        std::swap(Foods[i], solution);
+        // Suggesting new solution
+        Foods[i][param2change] = solution[param2change];
+        
         fitness[i] = FitnessSol;
         f[i]       = ObjValSol;
         trial[i]   = 0u;
@@ -292,9 +302,8 @@ inline void BeeHive<Input_type>::SendOnlookerBees() {
       
     } else { /* if */
       
-      i++;
-      if (i == FoodNumber)
-        i=0u;
+      if (++i == FoodNumber)
+        i = 0u;
       
     }
   } /* while */
@@ -378,12 +387,15 @@ fun <- function(x) {
   -cos(x[1])*cos(x[2])*exp(-((x[1] - pi)^2 + (x[2] - pi)^2))
 }
 
+fun <- function(x) sum(x^2)
+npar <- 10
+
 library(microbenchmark)
 library(ABCoptim)
 microbenchmark(
-  # .abc_cpp(c(1,1),fun, ub = c(5,5),lb = c(-5,-5), criter = 100, maxCycle = 100)[-8],
-  abc_optim(c(1,1), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 20),
-  abc_cpp(c(1,1), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 20),
+  .abc_cpp(rep(1,npar),fun, ub = rep(5,npar),lb = rep(-5,npar), criter = 100, maxCycle = 100, FoodNumber = 20)[-8],
+  # abc_optim(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 200),
+  abc_cpp(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 20),
   times=50,
   unit="relative"
 )
