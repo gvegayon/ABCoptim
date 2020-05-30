@@ -7,11 +7,10 @@
 using namespace Rcpp;
 
 // abc_cpp
-List abc_cpp(NumericVector& par, Function& fn, const std::vector< double >& lb, const std::vector< double >& ub, int FoodNumber, int limit, int maxCycle, int criter);
-RcppExport SEXP _ABCoptim_abc_cpp(SEXP parSEXP, SEXP fnSEXP, SEXP lbSEXP, SEXP ubSEXP, SEXP FoodNumberSEXP, SEXP limitSEXP, SEXP maxCycleSEXP, SEXP criterSEXP) {
+List abc_cpp(NumericVector& par, Function& fn, const std::vector< double >& lb, const std::vector< double >& ub, int FoodNumber, int limit, int maxCycle, int criter, int ncores, int seed, double tol);
+RcppExport SEXP _ABCoptim_abc_cpp(SEXP parSEXP, SEXP fnSEXP, SEXP lbSEXP, SEXP ubSEXP, SEXP FoodNumberSEXP, SEXP limitSEXP, SEXP maxCycleSEXP, SEXP criterSEXP, SEXP ncoresSEXP, SEXP seedSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector& >::type par(parSEXP);
     Rcpp::traits::input_parameter< Function& >::type fn(fnSEXP);
     Rcpp::traits::input_parameter< const std::vector< double >& >::type lb(lbSEXP);
@@ -20,13 +19,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type limit(limitSEXP);
     Rcpp::traits::input_parameter< int >::type maxCycle(maxCycleSEXP);
     Rcpp::traits::input_parameter< int >::type criter(criterSEXP);
-    rcpp_result_gen = Rcpp::wrap(abc_cpp(par, fn, lb, ub, FoodNumber, limit, maxCycle, criter));
+    Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(abc_cpp(par, fn, lb, ub, FoodNumber, limit, maxCycle, criter, ncores, seed, tol));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_ABCoptim_abc_cpp", (DL_FUNC) &_ABCoptim_abc_cpp, 8},
+    {"_ABCoptim_abc_cpp", (DL_FUNC) &_ABCoptim_abc_cpp, 11},
     {NULL, NULL, 0}
 };
 
