@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 // #include <omp.h>
-#include "ABCoptim_types.h"
 
 // [[Rcpp::plugins(openmp)]]
 
@@ -57,8 +56,6 @@ public:
   unsigned int neighbour = 0u;
   double ObjValSol = 0.0;
   double FitnessSol = 0.0;
-  // unsigned int t = 0;
-  // unsigned int i = 0;
   Input_type solution;
   unsigned int maxtrialindex = 0u;
   double maxfit;
@@ -213,8 +210,7 @@ inline void BeeHive<Input_type>::SendEmployedBees() {
     // Truncating
     if (solution[param2change] < lb[param2change])
       solution[param2change] = lb[param2change];
-    
-    if (solution[param2change] > ub[param2change])
+    else if (solution[param2change] > ub[param2change])
       solution[param2change] = ub[param2change];
     
     // Comparing current solution with new one
@@ -393,9 +389,9 @@ npar <- 10
 library(microbenchmark)
 library(ABCoptim)
 microbenchmark(
-  .abc_cpp(rep(1,npar),fun, ub = rep(5,npar),lb = rep(-5,npar), criter = 100, maxCycle = 100, FoodNumber = 20)[-8],
-  # abc_optim(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 200),
-  abc_cpp(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 20),
+  # .abc_cpp(rep(1,npar),fun, ub = rep(5,npar),lb = rep(-5,npar), criter = 100, maxCycle = 100, FoodNumber = 20)[-8],
+  abc_optim(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 100),
+  abc_cpp(rep(1,npar), fun, ub = 5, lb=-5, criter=100, maxCycle = 100, FoodNumber = 100),
   times=50,
   unit="relative"
 )

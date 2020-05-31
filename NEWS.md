@@ -1,3 +1,9 @@
+# Changes in ABCoptim version 0.15.0-99 (2020-05-31)
+
+* Internal changes only. Created the BeeHive C++ template, will eventually move
+  it to inst/include/ so that others can link to it.
+
+
 # Changes in ABCoptim version 0.15.0 (2017-11-05)
 
 * `abc_cpp` now checks the domain of the function.
