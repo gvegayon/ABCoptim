@@ -113,8 +113,7 @@ showing between 50\\% and 100\\% faster performance.
 Upper and Lower bounds (\code{ub}, \code{lb}) equal to infinite will be replaced
 by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
 
-If \code{D} (the number of parameters to be optimzed) is greater than one,
-then \code{lb} and \code{ub} can be either scalars (assuming that all the
+\code{lb} and \code{ub} can be either scalars (assuming that all the
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).
 
