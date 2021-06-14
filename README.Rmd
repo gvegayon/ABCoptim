@@ -1,6 +1,13 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
 ---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = "man/figures/", warning = FALSE)
+```
 
 [![CRAN status](https://www.r-pkg.org/badges/version/ABCoptim)](https://cran.r-project.org/package=ABCoptim)
 [![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim)
@@ -12,7 +19,7 @@ output: github_document
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 
-# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm
+# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.svg" align="right" height="140"/>
 
 This is an implementation of Karaboga (2005) ABC optimization algorithm. It was developed upon the basic version programmed in *C* and distributed at the algorithm's official website (see the references).
   
