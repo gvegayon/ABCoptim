@@ -11,7 +11,7 @@ Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://trav
 [![DOI](https://zenodo.org/badge/13732591.svg)](https://zenodo.org/badge/latestdoi/13732591)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
-# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.svg" align="right" height="140"/>
+# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.png" align="right" height="300px"/>
 
 This is an implementation of Karaboga (2005) ABC optimization algorithm.
 It was developed upon the basic version programmed in *C* and
