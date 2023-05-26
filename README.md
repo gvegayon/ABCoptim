@@ -10,6 +10,7 @@ Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://trav
 [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
 [![DOI](https://zenodo.org/badge/13732591.svg)](https://zenodo.org/badge/latestdoi/13732591)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/gvegayon)
 
 # ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.png" align="right" height="300px"/>
 
