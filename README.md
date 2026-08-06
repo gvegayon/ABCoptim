@@ -14,6 +14,16 @@ Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://trav
 
 # ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.png" align="right" height="300px"/>
 
+
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite ABCoptim.** If you use **ABCoptim** in published work, please cite it:
+>
+> Vega Yon G, Muñoz E. *ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization*. doi:[10.32614/CRAN.package.ABCoptim](https://doi.org/10.32614/CRAN.package.ABCoptim)
+>
+> Run `citation("ABCoptim")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+
 This is an implementation of Karaboga (2005) ABC optimization algorithm.
 It was developed upon the basic version programmed in *C* and
 distributed at the algorithm’s official website (see the references).

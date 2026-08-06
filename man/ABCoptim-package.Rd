@@ -38,3 +38,7 @@ Basic version of the algorithm implemented in \code{C} (ABC's official
 website) http://mf.erciyes.edu.tr/abc/form.aspx
 }
 \keyword{package}
+\section{How to cite}{
+  If you use \pkg{ABCoptim} in published work, please cite it. Run
+  \code{citation("ABCoptim")} in R for the full entry.
+}

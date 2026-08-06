@@ -1,12 +1,25 @@
-year <- sub("-.*", "", meta$Date)
+# Year resolution: CRAN sets Date/Publication on the installed package; fall
+# back to DESCRIPTION's Date, then to the current year, so the package entry
+# never renders as "(????)".
+year <- if (!is.null(meta$`Date/Publication`)) {
+  substr(meta$`Date/Publication`, 1, 4)
+} else if (!is.null(meta$Date)) {
+  substr(meta$Date, 1, 4)
+} else {
+  format(Sys.Date(), "%Y")
+}
 note <- sprintf("R package version %s", meta$Version)
 
-bibentry(bibtype = "Manual",
-         title = "{ABCoptim}: An implementation of the Artificial Bee Colony ({ABC}) Algorithm",
-         author = c(
-          person("George", "Vega Yon"),
-          person("Enyelbert", "Mu\\~noz")
-          ),
-         year = year,
-         note = note,
-         url = "https://github.com/gvegayon/ABCoptim")
+bibentry(
+  bibtype = "Manual",
+  title   = "{{ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization}}",
+  author  = c(
+    person("George", "Vega Yon", comment = c(ORCID = "0000-0002-3171-0844")),
+    person("Enyelbert", "Mu\\~noz")
+  ),
+  year    = year,
+  note    = note,
+  url     = "https://github.com/gvegayon/ABCoptim",
+  doi     = "10.32614/CRAN.package.ABCoptim",
+  header  = "To cite ABCoptim in publications use:"
+)
