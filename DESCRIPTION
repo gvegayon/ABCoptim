@@ -39,4 +39,3 @@ Classification/JEL: C61
 Encoding: UTF-8
 LazyLoad: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
