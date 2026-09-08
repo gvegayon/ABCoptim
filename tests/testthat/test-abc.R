@@ -17,3 +17,12 @@ test_that("Print and plot", {
   expect_silent(plot(ans0))
   expect_output(print(ans0), "Artificial")
 })
+
+test_that("abc_optim handles non-finite objective values", {
+  set.seed(213)
+  fn_with_na <- function(x) if (x[1] > 0) NA_real_ else sum(x^2)
+
+  expect_silent(
+    abc_optim(0, fn_with_na, lb = -1, ub = 1, FoodNumber = 5, maxCycle = 10)
+  )
+})

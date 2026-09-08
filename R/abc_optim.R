@@ -181,6 +181,9 @@ abc_optim <- function(
   # Fitness function
   CalculateFitness <- function(fun)
   {
+    if (length(fun) != 1L || !is.numeric(fun) || !is.finite(fun))
+      return(0)
+
     if (fun >= 0) return(1/(fun + 1))
     else return(1 + abs(fun))
   }
