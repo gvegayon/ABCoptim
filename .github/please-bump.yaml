@@ -1,0 +1,6 @@
+version: 1
+
+groups:
+  package:
+    files: [DESCRIPTION]
+    preset: r-package
