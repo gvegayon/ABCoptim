@@ -7,7 +7,6 @@ R/abc\.R
 readme\.md
 readme\.Rmd
 ^playground$
-\.git/
 source/
 .*\.sh
 ^appveyor\.yml$
@@ -18,3 +17,11 @@ source/
 ^docs$
 ^paper$
 ^LICENSE\.md$
+
+# Dev stuff
+\.devcontainer$
+\.git/
+\.github/
+\.vscode/
+_pkgdown\.yml$
+Makefile

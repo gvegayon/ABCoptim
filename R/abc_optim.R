@@ -5,7 +5,7 @@
 #' @param par Numeric vector. Initial values for the parameters to be optimized over
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
-#' scalar result.
+#' scalar finite result.
 #' @param ... In the case of `abc_*`, further arguments to be passed to 'fn',
 #' otherwise, further arguments passed to the method.
 #' @param FoodNumber Number of food sources to exploit. Notice that the param
@@ -39,6 +39,10 @@
 #' `lb` and `ub` can be either scalars (assuming that all the
 #' parameters share the same boundaries) or vectors (the parameters have
 #' different boundaries each other).
+#'
+#' The objective function must always return a single finite numeric value.
+#' Returning non-finite values (`NA`, `NaN`, `Inf`, `-Inf`) may cause the
+#' optimization to fail.
 #' 
 #' @return An list of class `abc_answer`, holding the following elements:
 #' \item{Foods}{Numeric matrix. Last position of the bees.}
@@ -54,13 +58,19 @@
 #' @references D. Karaboga, *An Idea based on Honey Bee Swarm for
 #' Numerical Optimization*, tech. report TR06,Erciyes University, Engineering
 #' Faculty, Computer Engineering Department, 2005
-#' http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
+#' <https://abc.erciyes.edu.tr/pub/tr06_2005.pdf>
+#' 
+#' Karaboga, D., & Basturk, B. (2007). A powerful and efficient algorithm for
+#' numerical function optimization: Artificial bee colony (ABC) algorithm. 
+#' Journal of Global Optimization, 39(3), 459–471. 
+#' <https://doi.org/10.1007/s10898-007-9149-x>
+
 #' 
 #' Artificial Bee Colony (ABC) Algorithm (website)
-#' http://mf.erciyes.edu.tr/abc/index.htm
+#' <https://abc.erciyes.edu.tr/>
 #' 
 #' Basic version of the algorithm implemented in `C` (ABC's official
-#' website) http://mf.erciyes.edu.tr/abc/form.aspx
+#' website) <https://abc.erciyes.edu.tr/software.htm>
 #' @keywords optimization
 #' @examples
 #' 
@@ -83,6 +93,13 @@
 #' }
 #' 
 #' abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
+#'
+#' # Keep the objective finite over the full search space
+#' fun_safe <- function(x) {
+#'   val <- log(x[1] + x[2])
+#'   if (!is.finite(val)) .Machine$double.xmax else val
+#' }
+#' abc_optim(c(1, 1), fun_safe, lb = -2, ub = 2, criter = 50)
 #' 
 #' # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 #' 
@@ -158,6 +175,8 @@ abc_optim <- function(
 
   lb[is.infinite(lb)] <- -.Machine$double.xmax*1e-10
   ub[is.infinite(ub)] <- .Machine$double.xmax*1e-10
+
+  if (FoodNumber <= 1) stop("FoodNumber must be greater than 1.")
   
   # Initial params
   Foods       <- matrix(double(FoodNumber*D), nrow=FoodNumber)
@@ -233,7 +252,7 @@ abc_optim <- function(
       sapply(1:D, function(k) {
         seq(lb[k],ub[k],length.out=FoodNumber)
       }
-      )
+      ) |> matrix(nrow = FoodNumber)
     
     for (i in 1:FoodNumber) {
       solution <<- Foods[i,]

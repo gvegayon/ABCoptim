@@ -54,7 +54,7 @@ abc_cpp(
 
 \item{fn}{A function to be minimized, with first argument of the vector of
 parameters over which minimization is to take place. It should return a
-scalar result.}
+scalar finite result.}
 
 \item{...}{In the case of \verb{abc_*}, further arguments to be passed to 'fn',
 otherwise, further arguments passed to the method.}
@@ -117,6 +117,10 @@ by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).
 
+The objective function must always return a single finite numeric value.
+Returning non-finite values (\code{NA}, \code{NaN}, \code{Inf}, \code{-Inf}) may cause the
+optimization to fail.
+
 The \code{plot} method shows the trace of the objective function
 as the algorithm unfolds. The line is merely the result of the objective
 function evaluated at each point (row) of the \code{hist} matrix return by
@@ -147,6 +151,13 @@ fun <- function(x) {
 }
 
 abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
+
+# Keep the objective finite over the full search space
+fun_safe <- function(x) {
+  val <- log(x[1] + x[2])
+  if (!is.finite(val)) .Machine$double.xmax else val
+}
+abc_optim(c(1, 1), fun_safe, lb = -2, ub = 2, criter = 50)
 
 # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 
@@ -202,13 +213,18 @@ coef(lm(y~0+X))
 D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
 Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
 Faculty, Computer Engineering Department, 2005
-http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
+\url{https://abc.erciyes.edu.tr/pub/tr06_2005.pdf}
+
+Karaboga, D., & Basturk, B. (2007). A powerful and efficient algorithm for
+numerical function optimization: Artificial bee colony (ABC) algorithm.
+Journal of Global Optimization, 39(3), 459–471.
+\url{https://doi.org/10.1007/s10898-007-9149-x}
 
 Artificial Bee Colony (ABC) Algorithm (website)
-http://mf.erciyes.edu.tr/abc/index.htm
+\url{https://abc.erciyes.edu.tr/}
 
 Basic version of the algorithm implemented in \code{C} (ABC's official
-website) http://mf.erciyes.edu.tr/abc/form.aspx
+website) \url{https://abc.erciyes.edu.tr/software.htm}
 }
 \author{
 George Vega Yon \email{g.vegayon@gmail.com}

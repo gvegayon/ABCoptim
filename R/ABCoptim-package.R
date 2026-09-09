@@ -14,7 +14,6 @@
 #' 
 #' @name ABCoptim-package
 #' @aliases ABCoptim-package ABCoptim abc
-#' @docType package
 #' @references D. Karaboga, *An Idea based on Honey Bee Swarm for
 #' Numerical Optimization*, tech. report TR06,Erciyes University, Engineering
 #' Faculty, Computer Engineering Department, 2005
@@ -33,7 +32,7 @@
 #'     demo(ABCoptim) # Some functions...
 #'   }
 #' 
-NULL
+"_PACKAGE"
 
 #' @useDynLib ABCoptim, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
