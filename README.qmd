@@ -1,7 +1,5 @@
 ---
-output:
-  github_document:
-    html_preview: false
+format: gfm
 ---
 
 
@@ -9,18 +7,18 @@ output:
 knitr::opts_chunk$set(fig.path = "man/figures/", warning = FALSE)
 ```
 
+```{=markdown}
 [![CRAN status](https://www.r-pkg.org/badges/version/ABCoptim)](https://cran.r-project.org/package=ABCoptim)
 [![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gvegayon/ABCoptim?branch=master&svg=true)](https://ci.appveyor.com/project/gvegayon/ABCoptim)
-[![Travis-CI Build Status](https://travis-ci.org/gvegayon/ABCoptim.svg?branch=master)](https://travis-ci.org/gvegayon/ABCoptim)
 [![codecov](https://codecov.io/gh/gvegayon/ABCoptim/branch/master/graph/badge.svg)](https://codecov.io/gh/gvegayon/ABCoptim)
 [![DOI](https://zenodo.org/badge/13732591.svg)](https://zenodo.org/badge/latestdoi/13732591)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/gvegayon)
+```
 
 
-# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.png" align="right" height="300px"/>
+
+# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm ![](man/figures/logo.png){width=200px align="right"}
 
 
 <!-- how-to-cite -->
@@ -66,3 +64,8 @@ D. Karaboga, _An Idea based on Honey Bee Swarm for Numerical Optimization_, tech
 Artificial Bee Colony (ABC) Algorithm (website) http://mf.erciyes.edu.tr/abc/index.htm
 
 Basic version of the algorithm implemented in 'C' (ABC's official website) http://mf.erciyes.edu.tr/abc/form.aspx
+
+
+## Code of Conduct
+  
+Please note that the ABCoptim project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

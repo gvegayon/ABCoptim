@@ -18,3 +18,6 @@ check:
 
 docs:
 	Rscript -e 'devtools::document()'
+
+README.md: README.qmd
+	quarto render README.qmd
