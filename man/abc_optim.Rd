@@ -213,13 +213,18 @@ coef(lm(y~0+X))
 D. Karaboga, \emph{An Idea based on Honey Bee Swarm for
 Numerical Optimization}, tech. report TR06,Erciyes University, Engineering
 Faculty, Computer Engineering Department, 2005
-http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
+\url{https://abc.erciyes.edu.tr/pub/tr06_2005.pdf}
+
+Karaboga, D., & Basturk, B. (2007). A powerful and efficient algorithm for
+numerical function optimization: Artificial bee colony (ABC) algorithm.
+Journal of Global Optimization, 39(3), 459–471.
+\url{https://doi.org/10.1007/s10898-007-9149-x}
 
 Artificial Bee Colony (ABC) Algorithm (website)
-http://mf.erciyes.edu.tr/abc/index.htm
+\url{https://abc.erciyes.edu.tr/}
 
 Basic version of the algorithm implemented in \code{C} (ABC's official
-website) http://mf.erciyes.edu.tr/abc/form.aspx
+website) \url{https://abc.erciyes.edu.tr/software.htm}
 }
 \author{
 George Vega Yon \email{g.vegayon@gmail.com}

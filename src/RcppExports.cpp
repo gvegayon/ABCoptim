@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // abc_cpp
 List abc_cpp(NumericVector& par, Function& fn, const std::vector< double >& lb, const std::vector< double >& ub, int FoodNumber, int limit, int maxCycle, int criter);
 RcppExport SEXP _ABCoptim_abc_cpp(SEXP parSEXP, SEXP fnSEXP, SEXP lbSEXP, SEXP ubSEXP, SEXP FoodNumberSEXP, SEXP limitSEXP, SEXP maxCycleSEXP, SEXP criterSEXP) {

@@ -58,13 +58,19 @@
 #' @references D. Karaboga, *An Idea based on Honey Bee Swarm for
 #' Numerical Optimization*, tech. report TR06,Erciyes University, Engineering
 #' Faculty, Computer Engineering Department, 2005
-#' http://mf.erciyes.edu.tr/abc/pub/tr06_2005.pdf
+#' <https://abc.erciyes.edu.tr/pub/tr06_2005.pdf>
+#' 
+#' Karaboga, D., & Basturk, B. (2007). A powerful and efficient algorithm for
+#' numerical function optimization: Artificial bee colony (ABC) algorithm. 
+#' Journal of Global Optimization, 39(3), 459–471. 
+#' <https://doi.org/10.1007/s10898-007-9149-x>
+
 #' 
 #' Artificial Bee Colony (ABC) Algorithm (website)
-#' http://mf.erciyes.edu.tr/abc/index.htm
+#' <https://abc.erciyes.edu.tr/>
 #' 
 #' Basic version of the algorithm implemented in `C` (ABC's official
-#' website) http://mf.erciyes.edu.tr/abc/form.aspx
+#' website) <https://abc.erciyes.edu.tr/software.htm>
 #' @keywords optimization
 #' @examples
 #' 

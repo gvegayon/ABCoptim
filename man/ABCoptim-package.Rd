@@ -37,8 +37,28 @@ http://mf.erciyes.edu.tr/abc/index.htm
 Basic version of the algorithm implemented in \code{C} (ABC's official
 website) http://mf.erciyes.edu.tr/abc/form.aspx
 }
-\keyword{package}
-\section{How to cite}{
-  If you use \pkg{ABCoptim} in published work, please cite it. Run
-  \code{citation("ABCoptim")} in R for the full entry.
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://gvegayon.github.io/ABCoptim}
+  \item \url{https://github.com/gvegayon/ABCoptim}
+  \item \url{http://mf.erciyes.edu.tr/abc/}
+  \item Report bugs at \url{https://github.com/gvegayon/ABCoptim/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: George Vega Yon \email{g.vegayon@gmail.com} (\href{https://orcid.org/0000-0002-3171-0844}{ORCID})
+
+Authors:
+\itemize{
+  \item George Vega Yon \email{g.vegayon@gmail.com} (\href{https://orcid.org/0000-0002-3171-0844}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Enyelbert Muñoz \email{enyeldoc2011@gmail.com} [contributor]
+}
+
+}
+\keyword{package}
