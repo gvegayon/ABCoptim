@@ -8,6 +8,8 @@ knitr::opts_chunk$set(fig.path = "man/figures/", warning = FALSE)
 ```
 
 ```{=markdown}
+[![R-CMD-check-final](https://github.com/gvegayon/ABCoptim/actions/workflows/r.yml/badge.svg)](https://github.com/gvegayon/ABCoptim/actions/workflows/r.yml)
+[![pkgdown](https://github.com/gvegayon/ABCoptim/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/gvegayon/ABCoptim/actions/workflows/pkgdown.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/ABCoptim)](https://cran.r-project.org/package=ABCoptim)
 [![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) 
@@ -17,8 +19,7 @@ knitr::opts_chunk$set(fig.path = "man/figures/", warning = FALSE)
 ```
 
 
-
-# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm ![](man/figures/logo.png){width=200px align="right"}
+# ABCoptim ![](man/figures/logo.png){height=128px align="right"}
 
 
 <!-- how-to-cite -->

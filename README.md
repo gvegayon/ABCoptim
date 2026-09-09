@@ -1,5 +1,7 @@
 
 
+[![R-CMD-check-final](https://github.com/gvegayon/ABCoptim/actions/workflows/r.yml/badge.svg)](https://github.com/gvegayon/ABCoptim/actions/workflows/r.yml)
+[![pkgdown](https://github.com/gvegayon/ABCoptim/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/gvegayon/ABCoptim/actions/workflows/pkgdown.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/ABCoptim)](https://cran.r-project.org/package=ABCoptim)
 [![Downloads](https://cranlogs.r-pkg.org/badges/ABCoptim)](http://cran.rstudio.com/package=ABCoptim)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ABCoptim)](http://cran.rstudio.com/package=ABCoptim) 
@@ -7,7 +9,7 @@
 [![DOI](https://zenodo.org/badge/13732591.svg)](https://zenodo.org/badge/latestdoi/13732591)
 [![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/gvegayon)
 
-# ABCoptim: An implementation of the Artificial Bee Colony (ABC) Algorithm <img src="man/figures/logo.png" data-align="right" width="200" />
+# ABCoptim <img src="man/figures/logo.png" data-align="right" height="128" />
 
 <!-- how-to-cite -->
 
