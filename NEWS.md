@@ -1,7 +1,12 @@
-# Changes in ABCoptim version 0.15.0-99 (2020-05-31)
+# Changes in ABCoptim version 0.15.0-99 (2026-09-09)
 
-* Internal changes only. Created the BeeHive C++ template, will eventually move
-  it to inst/include/ so that others can link to it.
+## Bug fixes
+
+* `FoodNumber` less or equal to 1 is now checked in both `abc_optim` and `abc_cpp`. It will throw an error if this condition is not met.
+
+## Internal changes
+
+* Internal changes only. Created the BeeHive C++ template, will eventually move it to inst/include/ so that others can link to it.
 
 
 # Changes in ABCoptim version 0.15.0 (2017-11-05)

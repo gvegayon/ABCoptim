@@ -121,8 +121,11 @@ inline BeeHive<Input_type>::BeeHive(
     // Rprintf("Iteration %i\n", i);
     Foods[i] = clone(GlobalParams);
     
+    if (FoodNumber <= 1u)
+      throw std::logic_error("FoodNumber must be greater than 1.");
+    
     for (unsigned int j = 0u; j < Npar; ++j)
-      Foods[i][j] = lb[j] + (ub[j] - lb[j])/(FoodNumber - 1.0)*i;
+      Foods[i][j] = lb[j] + (ub[j] - lb[j]) / (FoodNumber - 1) * i;
     
     // Checking if it is defined
     f[i] = as<double>(fn(Foods[i]));

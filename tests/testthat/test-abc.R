@@ -17,3 +17,8 @@ test_that("Print and plot", {
   expect_silent(plot(ans0))
   expect_output(print(ans0), "Artificial")
 })
+
+test_that("Using FoodNumber equal to one", {
+  expect_error(abc_optim(50, fw, lb=-100, ub=100, criter=100, FoodNumber = 1))
+  expect_error(abc_cpp(50, fw, lb=-100, ub=100, criter=100, FoodNumber = 1))
+})

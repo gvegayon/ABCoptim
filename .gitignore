@@ -2,3 +2,4 @@
 *.Rhist*
 .Rproj.user
 .vscode
+*.pdf

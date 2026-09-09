@@ -175,6 +175,8 @@ abc_optim <- function(
 
   lb[is.infinite(lb)] <- -.Machine$double.xmax*1e-10
   ub[is.infinite(ub)] <- .Machine$double.xmax*1e-10
+
+  if (FoodNumber <= 1) stop("FoodNumber must be greater than 1.")
   
   # Initial params
   Foods       <- matrix(double(FoodNumber*D), nrow=FoodNumber)
@@ -250,7 +252,7 @@ abc_optim <- function(
       sapply(1:D, function(k) {
         seq(lb[k],ub[k],length.out=FoodNumber)
       }
-      )
+      ) |> matrix(nrow = FoodNumber)
     
     for (i in 1:FoodNumber) {
       solution <<- Foods[i,]
