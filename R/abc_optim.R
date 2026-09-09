@@ -5,7 +5,7 @@
 #' @param par Numeric vector. Initial values for the parameters to be optimized over
 #' @param fn A function to be minimized, with first argument of the vector of
 #' parameters over which minimization is to take place. It should return a
-#' scalar result.
+#' scalar finite result.
 #' @param ... In the case of `abc_*`, further arguments to be passed to 'fn',
 #' otherwise, further arguments passed to the method.
 #' @param FoodNumber Number of food sources to exploit. Notice that the param
@@ -39,6 +39,10 @@
 #' `lb` and `ub` can be either scalars (assuming that all the
 #' parameters share the same boundaries) or vectors (the parameters have
 #' different boundaries each other).
+#'
+#' The objective function must always return a single finite numeric value.
+#' Returning non-finite values (`NA`, `NaN`, `Inf`, `-Inf`) may cause the
+#' optimization to fail.
 #' 
 #' @return An list of class `abc_answer`, holding the following elements:
 #' \item{Foods}{Numeric matrix. Last position of the bees.}
@@ -83,6 +87,13 @@
 #' }
 #' 
 #' abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
+#'
+#' # Keep the objective finite over the full search space
+#' fun_safe <- function(x) {
+#'   val <- log(x[1] + x[2])
+#'   if (!is.finite(val)) .Machine$double.xmax else val
+#' }
+#' abc_optim(c(1, 1), fun_safe, lb = -2, ub = 2, criter = 50)
 #' 
 #' # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 #' 
@@ -181,9 +192,6 @@ abc_optim <- function(
   # Fitness function
   CalculateFitness <- function(fun)
   {
-    if (length(fun) != 1L || !is.numeric(fun) || !is.finite(fun))
-      return(0)
-
     if (fun >= 0) return(1/(fun + 1))
     else return(1 + abs(fun))
   }

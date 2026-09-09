@@ -54,7 +54,7 @@ abc_cpp(
 
 \item{fn}{A function to be minimized, with first argument of the vector of
 parameters over which minimization is to take place. It should return a
-scalar result.}
+scalar finite result.}
 
 \item{...}{In the case of \verb{abc_*}, further arguments to be passed to 'fn',
 otherwise, further arguments passed to the method.}
@@ -117,6 +117,10 @@ by either \code{.Machine$double.xmax} or \code{-.Machine$double.xmax}.
 parameters share the same boundaries) or vectors (the parameters have
 different boundaries each other).
 
+The objective function must always return a single finite numeric value.
+Returning non-finite values (\code{NA}, \code{NaN}, \code{Inf}, \code{-Inf}) may cause the
+optimization to fail.
+
 The \code{plot} method shows the trace of the objective function
 as the algorithm unfolds. The line is merely the result of the objective
 function evaluated at each point (row) of the \code{hist} matrix return by
@@ -147,6 +151,13 @@ fun <- function(x) {
 }
 
 abc_cpp(rep(0,2), fun, lb=-10, ub=10, criter=50, fnscale = -1)
+
+# Keep the objective finite over the full search space
+fun_safe <- function(x) {
+  val <- log(x[1] + x[2])
+  if (!is.finite(val)) .Machine$double.xmax else val
+}
+abc_optim(c(1, 1), fun_safe, lb = -2, ub = 2, criter = 50)
 
 # EXAMPLE 2: global minimum at about (-15.81515) ----------------------------
 
