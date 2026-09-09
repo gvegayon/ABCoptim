@@ -19,7 +19,7 @@ knitr::opts_chunk$set(fig.path = "man/figures/", warning = FALSE)
 ```
 
 
-# ABCoptim ![](man/figures/logo.png){height=128px align="right"}
+# ABCoptim ![](man/figures/logo.png){height=128px fig-align="right"}
 
 
 <!-- how-to-cite -->
