@@ -25,3 +25,4 @@ source/
 \.vscode/
 _pkgdown\.yml$
 Makefile
+^CODE_OF_CONDUCT\.md$

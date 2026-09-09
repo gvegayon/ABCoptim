@@ -96,7 +96,7 @@
 #'
 #' # Keep the objective finite over the full search space
 #' fun_safe <- function(x) {
-#'   val <- log(x[1] + x[2])
+#'   val <- suppressWarnings(log(x[1] + x[2]))
 #'   if (!is.finite(val)) .Machine$double.xmax else val
 #' }
 #' abc_optim(c(1, 1), fun_safe, lb = -2, ub = 2, criter = 50)
