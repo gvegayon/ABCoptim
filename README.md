@@ -9,7 +9,7 @@
 [![DOI](https://zenodo.org/badge/13732591.svg)](https://zenodo.org/badge/latestdoi/13732591)
 [![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/gvegayon)
 
-# ABCoptim <img src="man/figures/logo.png" data-fig-align="right" height="128" />
+# ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization <img src="man/figures/logo.png" align="right" height="150" />
 
 <!-- how-to-cite -->
 

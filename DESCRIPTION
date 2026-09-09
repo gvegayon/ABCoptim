@@ -1,7 +1,6 @@
 Type: Package
 Package: ABCoptim
-Title: Implementation of Artificial Bee Colony (ABC)
-    Optimization
+Title: Implementation of Artificial Bee Colony (ABC) Optimization
 Version: 0.15.0-99
 Authors@R: c(person( given = "George", family = "Vega Yon", role = c("aut", "cre"), email = "g.vegayon@gmail.com", comment = c(ORCID="0000-0002-3171-0844")), person( given = "Enyelbert", family = "Muñoz", role = "ctb", email = "enyeldoc2011@gmail.com"))
 Description: An implementation of Karaboga (2005) Artificial Bee Colony Optimization algorithm <DOI:10.1007/s10898-007-9149-x>. This was developed upon the basic version programmed in C and available at the algorithm's official website.
