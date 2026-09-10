@@ -1,6 +1,5 @@
 ---
 title: "How the ABC algorithm works in ABCoptim"
-format: html
 execute:
   echo: true
   warning: false

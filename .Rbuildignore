@@ -20,9 +20,11 @@ source/
 
 # Dev stuff
 \.devcontainer$
-\.git/
-\.github/
-\.vscode/
+\.git$
+\.github$
+\.vscode$
 _pkgdown\.yml$
 Makefile
 ^CODE_OF_CONDUCT\.md$
+^README\.qmd$
+^AGENTS\.md$

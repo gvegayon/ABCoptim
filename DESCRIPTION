@@ -15,7 +15,9 @@ Imports:
     stats,
     utils
 Suggests:
-    testthat, covr
+    testthat,
+    covr,
+    quarto
 LinkingTo: 
     Rcpp
 Classification/ACM: G.1.6
@@ -24,3 +26,5 @@ Encoding: UTF-8
 LazyLoad: yes
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.0
+VignetteBuilder:
+    quarto
