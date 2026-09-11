@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: 'To cite package "ABCoptim" in publications use:'
+type: software
+license: MIT
+title: 'ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization'
+version: 0.15.0-99
+doi: 10.32614/CRAN.package.ABCoptim
+abstract: An implementation of Karaboga (2005) Artificial Bee Colony Optimization
+  algorithm <DOI:10.1007/s10898-007-9149-x>. This was developed upon the basic version
+  programmed in C and available at the algorithm's official website.
+authors:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+preferred-citation:
+  type: manual
+  title: 'ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization'
+  authors:
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+    email: g.vegayon@gmail.com
+  - family-names: Mu\~noz
+    given-names: Enyelbert
+  year: '2026'
+  notes: R package version 0.15.0-99
+  url: https://github.com/gvegayon/ABCoptim
+  doi: 10.32614/CRAN.package.ABCoptim
+repository: https://CRAN.R-project.org/package=ABCoptim
+repository-code: https://github.com/gvegayon/ABCoptim
+url: https://gvegayon.github.io/ABCoptim
+contact:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844

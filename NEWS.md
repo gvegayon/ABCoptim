@@ -6,6 +6,8 @@
 
 ## Internal changes
 
+* Added repository citation metadata for GitHub and other CFF consumers.
+
 * Internal changes only. Created the BeeHive C++ template, will eventually move it to inst/include/ so that others can link to it.
 
 
@@ -28,5 +30,4 @@
 * Both `abc_cpp` and `abc_optim` return objects of class `abc_answer`.
 
 * Objects of class `abc_answer` return the trace of the global optimums.
-
 
