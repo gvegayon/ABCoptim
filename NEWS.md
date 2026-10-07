@@ -1,4 +1,4 @@
-# Changes in ABCoptim version 0.15.0-99 (2026-09-09)
+# Changes in ABCoptim version 0.16.0 (2026-09-09)
 
 ## Bug fixes
 

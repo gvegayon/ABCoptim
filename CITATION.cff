@@ -3,7 +3,7 @@ message: 'To cite package "ABCoptim" in publications use:'
 type: software
 license: MIT
 title: 'ABCoptim: Implementation of Artificial Bee Colony (ABC) Optimization'
-version: 0.15.0-99
+version: 0.16.0
 doi: 10.32614/CRAN.package.ABCoptim
 abstract: An implementation of Karaboga (2005) Artificial Bee Colony Optimization
   algorithm <DOI:10.1007/s10898-007-9149-x>. This was developed upon the basic version
@@ -24,7 +24,7 @@ preferred-citation:
   - family-names: Mu\~noz
     given-names: Enyelbert
   year: '2026'
-  notes: R package version 0.15.0-99
+  notes: R package version 0.16.0
   url: https://github.com/gvegayon/ABCoptim
   doi: 10.32614/CRAN.package.ABCoptim
 repository: https://CRAN.R-project.org/package=ABCoptim
